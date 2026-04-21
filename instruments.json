@@ -1,0 +1,12 @@
+"instruments":[
+    	{
+		"IsActive" : true,
+		"InstrumentID" : "Temp",
+		"InstrumentName" : "Labjack Internal Temperature",
+		"CalibrationFunction" : "lambda x: x - 273",
+		"Unit": "C",
+		"IsLabJack": true,
+		"LabJackPort": "TEMPERATURE_DEVICE_K"
+  	}
+]
+

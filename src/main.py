@@ -6,14 +6,23 @@ from dataclasses import dataclass
 
 serverAddress = 'http::addr=liquids.lan:9000;'
 
+# [TO-DO] set up better logger config
 logger = logging.getLogger(__name__)
 
+# [DONE] finish this dataclass
 @dataclass
 class Instruments:
-    number: int
+    InstrumentID: str
+    InstrumentName: str
+    CalibrationFunction: callable
+    IsActive: bool
+    Unit: str
+    IsLabJack: bool
+    LabJackPort: str
 
 def main() -> None:
-    logging.basicConfig(filename=f'{__name__}.log', level=logging.DEBUG)
+    #logging.basicConfig(filename=f'{__name__}.log', level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG)
     logger.info("Started Logging")
     # Program needs to do a couple things
     # [DONE] Connect to QuestDB for queries
@@ -24,17 +33,16 @@ def main() -> None:
             password='quest', 
             dbname='LiquidsTestStand', 
             autocommit=True) as connector:
-        with connector.cursor(binary=True) as cursor:
+        with connector.cursor(binary=True, row_factory=pg.rows.dict_row) as cursor:
             cursor.execute("SELECT version")
             version = cursor.fetchone()
-            logging.info(f'Connected to QuestDB version: {version[0]}')
-    # [TO-DO] pull active instruments (labjack port + calibration eq + database stuff) from database
+            logging.info(f'Connected to QuestDB version: {version["version"]}')
+    # [IN-PROGRESS] pull active instruments (labjack port + calibration eq + database stuff) from database
             cursor.execute("SELECT * FROM Instruments")
             instrumentTable = cursor.fetchall()
             logging.debug(instrumentTable)
             for row in instrumentTable:
                 logging.debug(instrumentTable)
-
     
     # [DONE] connect to Labjack
     try:
@@ -44,12 +52,14 @@ def main() -> None:
         raise error
 
     # [TO-DO] connect to QuestDB for sending
+
     # [TO-DO] Perform data ingestion:
     # - Get voltages of each active instrument
     # - Run calibration function on voltage
     # - Write (time,voltage,value) to each instrument table
     # - Repeat until close
-    # [TO-DO] Exit cleanly on error (+ give me logs of what's going on) 
+
+    # [IN-PROGRESS] Exit cleanly on error (+ give me logs of what's going on) 
     ljm.close(labjackHandle)
 
     return
