@@ -1,5 +1,5 @@
 ARG PYTHON_VERSION=3.14.3
-FROM python:$PYTHON_VERSION-slim as base
+FROM python:$PYTHON_VERSION-slim AS builder
 
 # Prevents Python from writing pyc files.
 ENV PYTHONDONTWRITEBYTECODE=0
@@ -8,7 +8,7 @@ ENV PYTHONDONTWRITEBYTECODE=0
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /app
+WORKDIR /build
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
@@ -16,29 +16,30 @@ WORKDIR /app
 # into this layers
 
 # Copy the source code into the container.
-COPY . .
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt update && apt install -y --no-install-recommends \
     build-essential \
     gcc \
     python3-dev \
     libffi-dev \
     libssl-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
-CMD exit
-
 ENV PATH="/root/.cargo/bin:${PATH}"
 
+COPY requirements.txt .
 
+RUN pip install --prefix=/install -r requirements.txt
 
-RUN pip install --no-cache-dir -r requirements.txt
+FROM python:$PYTHON_VERSION-slim 
 
-	
-# RUN python -m pip install --break-system-packages -r requirements.txt 
+COPY --from=builder /install /usr/local
+COPY . .
 
+WORKDIR /app
 
 # Set environment Variables
 ENV DBURL="100.64.192.19"
