@@ -1,12 +1,30 @@
 "instruments":[
     	{
-		"IsActive" : true,
 		"InstrumentID" : "Temp",
 		"InstrumentName" : "Labjack Internal Temperature",
 		"CalibrationFunction" : "lambda x: x - 273",
 		"Unit": "C",
+		"IsActive" : true,
 		"IsLabJack": true,
 		"LabJackPort": "TEMPERATURE_DEVICE_K"
+  	},
+    	{
+		"InstrumentID" : "LOXFlow",
+		"InstrumentName" : "LOX Flowmeter",
+		"CalibrationFunction" : "lambda x: x / getLastTime(timer1)",
+		"Unit": "C",
+		"IsActive" : true,
+		"IsLabJack": true,
+		"LabJackPort": "DIO0_EF_READ_A"
+  	},
+    	{
+		"InstrumentID" : "KERFlow",
+		"InstrumentName" : "Kerosene Flowmeter",
+		"CalibrationFunction" : "lambda x: x / getLastTime(timer2)",
+		"Unit": "C",
+		"IsActive" : true,
+		"IsLabJack": true,
+		"LabJackPort": "DIO1_EF_READ_A"
   	}
 ]
 
