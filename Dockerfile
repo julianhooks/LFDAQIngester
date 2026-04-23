@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
     libffi-dev \
     libssl-dev \
+    cargo \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir -r requirements.txt
@@ -36,5 +37,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 ENV DBURL="100.64.192.19"
 
 # Run the application.
-CMD["python", "src/main.py"]
+CMD ["python", "src/main.py"]
 
