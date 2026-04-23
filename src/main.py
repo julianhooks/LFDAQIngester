@@ -51,9 +51,7 @@ def setup() -> tuple[int]:
     # [IN-PROGRESS] pull active instruments (labjack port + calibration eq + database stuff) from database
             cursor.execute("SELECT * FROM Instruments")
             instrumentTable = cursor.fetchall()
-            logging.debug(instrumentTable)
             for row in instrumentTable:
-                logging.debug(instrumentTable)
                 instruments.append(
                         Instrument(
                             row["InstrumentID"],
@@ -82,7 +80,7 @@ def setup() -> tuple[int]:
     # [DONE] connect to Labjack
     # getLabJackHandle() -> int:
     try:
-        labjackHandle = ljm.open("T7","ANY","ANY")
+        labjackHandle = ljm.openS()
     except ljm.LJMError as error:
         logging.error(f"Error occured when connecting to LabJack: {error}.")
         raise error
