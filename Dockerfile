@@ -15,6 +15,9 @@ WORKDIR /app
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
 # into this layers
 
+# Copy the source code into the container.
+COPY . .
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
@@ -28,8 +31,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 	
 # RUN python -m pip install --break-system-packages -r requirements.txt 
 
-# Copy the source code into the container.
-COPY . .
 
 # Set environment Variables
 ENV DBURL="100.64.192.19"
