@@ -7,6 +7,8 @@ from dataclasses import dataclass
 # [TO-DO] set up better logger config
 logger = logging.getLogger(__name__)
 
+dburl="liquids-ts"
+
 # [DONE] finish this dataclass
 @dataclass
 class Instrument:
@@ -83,7 +85,7 @@ def setup() -> tuple[int]:
     except ljm.LJMError as error:
         logging.error(f"Error occured when connecting to LabJack: {error}.")
         raise error
-    logging.info(f"Connected to LabJack on {ljm.getHandleInfo(labjackHandle)}."
+    logging.info(f"Connected to LabJack on {ljm.getHandleInfo(labjackHandle)}.")
 
     # [IN-PROGRESS] set up counters 1 and 2 for flowmeters
     ljm.eWriteName(labjackHandle,"DIO0_EF_ENABLE",0)
