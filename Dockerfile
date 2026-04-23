@@ -16,8 +16,10 @@ WORKDIR /app
 # into this layers
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=bind,source=requirements.txt,target=requirements.txt \	
-    python -m pip install --break-system-packages -r requirements.txt 
+    --mount=type=bind,source=requirements.txt,target=requirements.txt
+
+	
+# RUN python -m pip install --break-system-packages -r requirements.txt 
 
 # Copy the source code into the container.
 COPY . .
@@ -26,5 +28,5 @@ COPY . .
 ENV DBURL="100.64.192.19"
 
 # Run the application.
-CMD sh
+CMD bash
 
