@@ -15,8 +15,15 @@ WORKDIR /app
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
 # into this layers
 
-RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=bind,source=requirements.txt,target=requirements.txt
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    python3-dev \
+    libffi-dev \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir -r requirements.txt
 
 	
 # RUN python -m pip install --break-system-packages -r requirements.txt 
@@ -28,5 +35,5 @@ COPY . .
 ENV DBURL="100.64.192.19"
 
 # Run the application.
-CMD bash
+CMD["python", "src/main.py"]
 
