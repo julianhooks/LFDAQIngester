@@ -2,3 +2,5 @@ services:
   server:
     build:
       context: .
+    env:
+      - DBURL="liquids.lan"
