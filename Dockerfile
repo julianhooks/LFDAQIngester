@@ -25,11 +25,10 @@ RUN apt update && apt install -y --no-install-recommends \
     libssl-dev \
     curl \
     unzip \
+    udev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-RUN mkdir -p /lib/udev/rules.d
 
 RUN curl https://files.labjack.com/installers/LJM/Linux/AArch64/release/LabJack-LJM_2025-05-07.zip > labjackDrivers.zip
 RUN unzip labjackDrivers.zip

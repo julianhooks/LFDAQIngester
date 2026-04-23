@@ -2,5 +2,7 @@ services:
   server:
     build:
       context: .
+    networks:
+      - host
     environment:
       - DBURL=liquids.lan
