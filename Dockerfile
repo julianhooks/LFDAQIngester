@@ -28,6 +28,10 @@ RUN apt update && apt install -y --no-install-recommends \
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
+RUN curl https://files.labjack.com/installers/LJM/Linux/AArch64/release/LabJack-LJM_2025-05-07.zip > labjackDrivers.zip
+RUN unzip labjackDrivers.zip
+RUN sh labjack_ljm_installer.run
+
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 COPY requirements.txt .
