@@ -24,6 +24,7 @@ RUN apt update && apt install -y --no-install-recommends \
     libffi-dev \
     libssl-dev \
     curl \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
