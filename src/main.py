@@ -34,7 +34,7 @@ def setup() -> tuple[int]:
     # [DONE] Connect to QuestDB for queries
     # getInstruments(dbconfigs) -> list[Instruments]:
     with pg.connect(
-            host='liquids-ts', 
+            host=dburl, 
             port=8812, 
             user='admin', 
             password='quest',
@@ -67,7 +67,7 @@ def setup() -> tuple[int]:
     try:
         questDBHandle = questdb.ingress.Sender(
             questdb.ingress.Protocol.Http, 
-            'liquids-ts', 
+            dburl, 
             9000, 
             username='admin', 
             password='quest')
@@ -83,6 +83,7 @@ def setup() -> tuple[int]:
     except ljm.LJMError as error:
         logging.error(f"Error occured when connecting to LabJack: {error}.")
         raise error
+    logging.info(f"Connected to LabJack on {ljm.getHandleInfo(labjackHandle)}."
 
     # [IN-PROGRESS] set up counters 1 and 2 for flowmeters
     ljm.eWriteName(labjackHandle,"DIO0_EF_ENABLE",0)
