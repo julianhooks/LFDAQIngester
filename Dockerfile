@@ -37,9 +37,9 @@ RUN pip install --prefix=/install -r requirements.txt
 FROM python:$PYTHON_VERSION-slim 
 
 COPY --from=builder /install /usr/local
+WORKDIR /app
 COPY . .
 
-WORKDIR /app
 
 # Set environment Variables
 ENV DBURL="100.64.192.19"
