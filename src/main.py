@@ -3,11 +3,12 @@ import questdb.ingress
 import psycopg as pg
 import logging
 from dataclasses import dataclass
+import os
 
 # [TO-DO] set up better logger config
 logger = logging.getLogger(__name__)
 
-dburl="liquids-ts"
+dburl=os.getenv("DBURL")
 
 # [DONE] finish this dataclass
 @dataclass

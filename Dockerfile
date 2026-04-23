@@ -2,7 +2,7 @@ ARG PYTHON_VERSION=3.14.3
 FROM python:${PYTHON_VERSION}-slim as base
 
 # Prevents Python from writing pyc files.
-ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONDONTWRITEBYTECODE=0
 
 # Keeps Python from buffering stdout and stderr to avoid situations where
 # the application crashes without emitting any logs due to buffering.
@@ -36,8 +36,8 @@ USER appuser
 # Copy the source code into the container.
 COPY . .
 
-# Expose the port that the application listens on.
-EXPOSE 8000
+# Set environment Variables
+ENV DBURL="100.64.192.19"
 
 # Run the application.
 CMD python "./src/main.py"
