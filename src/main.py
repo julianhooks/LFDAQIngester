@@ -82,7 +82,7 @@ def setup() -> tuple[int]:
     # [DONE] connect to Labjack
     # getLabJackHandle() -> int:
     try:
-        labjackHandle = ljm.openS("T7","ANY","ANY")
+        labjackHandle = ljm.open("T7","ANY","ANY")
     except ljm.LJMError as error:
         logging.error(f"Error occured when connecting to LabJack: {error}.")
         raise error
