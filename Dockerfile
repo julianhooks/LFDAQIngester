@@ -33,7 +33,7 @@ RUN ./labjack_ljm_installer.run -- --no-restart-device-rules
 
 COPY requirements.txt .
 
-RUN pip install --prefix=/install -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Stage 2 build
 FROM builder 
