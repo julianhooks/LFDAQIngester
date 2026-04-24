@@ -35,10 +35,6 @@ def getElapsedTime(timer:int) -> float:
     lastTime[timer] = time()
     return deltaTime
 
-def config() -> None:
-    global timer1 = enableTimer()
-    global timer2 = enableTimer()
-
 def setup() -> tuple[int]:
     #setup returns
     labjackHandle = 0
@@ -119,11 +115,9 @@ def setup() -> tuple[int]:
 
     # enable below and jump DAC1 to DIO0 to test counter
     # ljm.eWriteName(labjackHandle,"DAC1_FREQUENCY_OUT_ENABLE",1)
-
-    # global timer1
-    # timer1 = enableTimer()
-    # global timer2
-    # timer1 = enableTimer()
+    
+    timer1 = enableTimer()
+    global timer1
 
     questDBHandle.__enter__()
     return instruments, labjackHandle, questDBHandle
