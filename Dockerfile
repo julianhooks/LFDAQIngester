@@ -27,7 +27,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 RUN curl https://files.labjack.com/installers/LJM/Linux/AArch64/release/LabJack-LJM_2025-05-07.zip > labjackDrivers.zip
 RUN unzip labjackDrivers.zip
-RUN ./labjack_ljm_installer.run --no-restart-device-rules
+RUN ./labjack_ljm_installer.run 
 
 RUN find / -type f -name libLabJackM.so
 
