@@ -136,7 +136,7 @@ def ingestLoop(instruments,labJackHandle,questDBHandle):
                 'InstrumentValues',
                 symbols={'InstrumentID': instrument.InstrumentID},
                 columns={
-                    'UncalibratedValue': uncalibatedValue,
+                    'UncalibratedValue': uncalibratedValue,
                     'CalibratedValue': calibratedValue},
                 at=questdb.ingress.TimestampNanos.now())
         questDBHandle.flust()
