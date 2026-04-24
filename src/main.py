@@ -54,7 +54,7 @@ def setup() -> tuple[int]:
             instrumentTable = cursor.fetchall()
             for row in instrumentTable:
                 functionNamespace = {}
-                exec("cf = "+ row["CalibrationFunction"],functionNamespace),
+                exec("cf = "+ row["CalibrationFunction"],functionNamespace)
                 instruments.append(
                         Instrument(
                             row["InstrumentID"],
@@ -140,7 +140,7 @@ def ingestLoop(instruments,labJackHandle,questDBHandle):
                     'UncalibratedValue': uncalibratedValue,
                     'CalibratedValue': calibratedValue},
                 at=questdb.ingress.TimestampNanos.now())
-        questDBHandle.flush()
+    questDBHandle.flush()
 
 def main() -> None:
     instruments, labJackHandle, questDBHandle = setup()
