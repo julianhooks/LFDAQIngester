@@ -41,18 +41,6 @@ FROM builder
 WORKDIR /app
 COPY . .
 
-RUN apt update && apt install -y --no-install-recommends \
-    build-essential \
-    curl \
-    unzip \
-    udev \
-    libusb-1.0-0 \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN curl https://files.labjack.com/installers/LJM/Linux/AArch64/release/LabJack-LJM_2025-05-07.zip > labjackDrivers.zip
-RUN unzip labjackDrivers.zip
-RUN ./labjack_ljm_installer.run -- --no-restart-device-rules 
-
 # Set environment Variables
 ENV DBURL="100.64.192.19"
 
