@@ -144,9 +144,11 @@ def ingestLoop(instruments,labJackHandle,questDBHandle):
 
 def main() -> None:
     instruments, labJackHandle, questDBHandle = setup()
-    while(True):
-        ingestLoop(instruments,labJackHandle,questDBHandle)
-    onexit(labJackHandle,questDBHandle)
+    try:
+        while(True):
+            ingestLoop(instruments,labJackHandle,questDBHandle)
+    finally:
+        onexit(labJackHandle,questDBHandle)
     return
 
 if (__name__ == "__main__"):
