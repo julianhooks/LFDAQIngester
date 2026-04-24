@@ -53,15 +53,17 @@ def setup() -> tuple[int]:
             cursor.execute("SELECT * FROM Instruments")
             instrumentTable = cursor.fetchall()
             for row in instrumentTable:
+                exec("cf = " + row["CalibrationFunction"])
                 instruments.append(
                         Instrument(
                             row["InstrumentID"],
                             row["InstrumentName"],
-                            exec(row["CalibrationFunction"]),
+                            cf,
                             bool(row["IsActive"]),
                             row["Unit"],
                             bool(row["IsLabJack"]),
                             row["LabJackPort"]))
+
 
     # [TO-DO] connect to QuestDB for sending
     # we do want to use http here, not tcp, because for functionality is available for http
