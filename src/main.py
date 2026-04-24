@@ -107,6 +107,7 @@ def setup() -> tuple[int]:
     # global timer2
     # timer1 = enableTimer()
 
+    questDBHandle.connect()
     return instruments, labjackHandle, questDBHandle
     
 # [IN-PROGRESS] Exit cleanly on error (+ give me logs of what's going on) 
