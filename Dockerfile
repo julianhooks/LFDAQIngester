@@ -21,22 +21,23 @@ RUN apt update && apt install -y --no-install-recommends \
     curl \
     unzip \
     udev \
+    libusb-1.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-RUN find / -type f -name libLabJackM.so
-
 ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN curl https://files.labjack.com/installers/LJM/Linux/AArch64/release/LabJack-LJM_2025-05-07.zip > labjackDrivers.zip
+RUN unzip labjackDrivers.zip
+RUN ./labjack_ljm_installer.run -- --no-restart-device-rules 
 
 COPY requirements.txt .
 
 RUN pip install --prefix=/install -r requirements.txt
 
 # Stage 2 build
-FROM python:$PYTHON_VERSION-slim 
+FROM builder 
 
-COPY --from=builder /install /usr/local
 WORKDIR /app
 COPY . .
 
