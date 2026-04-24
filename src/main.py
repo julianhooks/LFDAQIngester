@@ -80,7 +80,7 @@ def setup() -> tuple[int]:
 
     # [DONE] connect to Labjack
     # getLabJackHandle() -> int:
-    print(ljm.listAll("ANY","ANY")
+    print(ljm.listAll("ANY","ANY"))
     try:
         labjackHandle = ljm.openS("T7","ANY","ANY")
     except ljm.LJMError as error:
