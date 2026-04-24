@@ -2,9 +2,6 @@ services:
   server:
     build:
       context: .
-    networks:
-      - host
     environment:
       - DBURL=liquids.lan
-networks:
-  host:
+    network_mode: host
