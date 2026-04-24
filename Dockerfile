@@ -25,10 +25,6 @@ RUN apt update && apt install -y --no-install-recommends \
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
-RUN curl https://files.labjack.com/installers/LJM/Linux/AArch64/release/LabJack-LJM_2025-05-07.zip > labjackDrivers.zip
-RUN unzip labjackDrivers.zip
-RUN ./labjack_ljm_installer.run -- --no-restart-device-rules 
-
 RUN find / -type f -name libLabJackM.so
 
 ENV PATH="/root/.cargo/bin:${PATH}"
@@ -43,6 +39,18 @@ FROM python:$PYTHON_VERSION-slim
 COPY --from=builder /install /usr/local
 WORKDIR /app
 COPY . .
+
+RUN apt update && apt install -y --no-install-recommends \
+    build-essential \
+    curl \
+    unzip \
+    udev \
+    libusb-1.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl https://files.labjack.com/installers/LJM/Linux/AArch64/release/LabJack-LJM_2025-05-07.zip > labjackDrivers.zip
+RUN unzip labjackDrivers.zip
+RUN ./labjack_ljm_installer.run -- --no-restart-device-rules 
 
 
 # Set environment Variables
