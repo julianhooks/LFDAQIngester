@@ -4,12 +4,15 @@ import psycopg as pg
 import logging
 from dataclasses import dataclass
 import os
+from time import time
 
 # [TO-DO] set up better logger config
 logger = logging.getLogger(__name__)
 
 dburl=os.getenv("DBURL")
 labjackURL='jackjack.lan'
+    
+lastTime = []
 
 # [DONE] finish this dataclass
 @dataclass
@@ -21,6 +24,20 @@ class Instrument:
     Unit: str
     IsLabJack: bool
     LabJackPort: str
+
+
+def enableTimer() -> int:
+    lastTime.append(time())
+    return len(lastTime) - 1
+
+def getElapsedTime(timer:int) -> float:
+    deltaTime = time() - lastTime[timer]
+    lastTime[timer] = time()
+    return deltaTime
+
+def config() -> None:
+    global timer1 = enableTimer()
+    global timer2 = enableTimer()
 
 def setup() -> tuple[int]:
     #setup returns
