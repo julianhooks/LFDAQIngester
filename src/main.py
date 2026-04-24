@@ -9,6 +9,7 @@ import os
 logger = logging.getLogger(__name__)
 
 dburl=os.getenv("DBURL")
+labjackURL='jackjack.lan'
 
 # [DONE] finish this dataclass
 @dataclass
@@ -79,8 +80,9 @@ def setup() -> tuple[int]:
 
     # [DONE] connect to Labjack
     # getLabJackHandle() -> int:
+    print(ljm.listAll("ANY","ANY")
     try:
-        labjackHandle = ljm.openS()
+        labjackHandle = ljm.openS("T7","ANY","ANY")
     except ljm.LJMError as error:
         logging.error(f"Error occured when connecting to LabJack: {error}.")
         raise error
