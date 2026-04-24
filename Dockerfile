@@ -1,3 +1,4 @@
+# Stage 1 build: pull from python slim source
 ARG PYTHON_VERSION=3.14.3
 FROM python:$PYTHON_VERSION-slim AS builder
 
@@ -8,14 +9,8 @@ ENV PYTHONDONTWRITEBYTECODE=0
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
+#
 WORKDIR /build
-
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
-# Leverage a bind mount to requirements.txt to avoid having to copy them into
-# into this layers
-
-# Copy the source code into the container.
 
 RUN apt update && apt install -y --no-install-recommends \
     build-essential \
@@ -34,12 +29,15 @@ RUN curl https://files.labjack.com/installers/LJM/Linux/AArch64/release/LabJack-
 RUN unzip labjackDrivers.zip
 RUN ./labjack_ljm_installer.run -- --without-kipling --no-restart-device-rules
 
+RUN find / -type f -name libLibJackM.so
+
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 COPY requirements.txt .
 
 RUN pip install --prefix=/install -r requirements.txt
 
+# Stage 2 build
 FROM python:$PYTHON_VERSION-slim 
 
 COPY --from=builder /install /usr/local
