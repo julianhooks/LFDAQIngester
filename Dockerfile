@@ -29,7 +29,7 @@ RUN curl https://files.labjack.com/installers/LJM/Linux/AArch64/release/LabJack-
 RUN unzip labjackDrivers.zip
 RUN ./labjack_ljm_installer.run -- --without-kipling --no-restart-device-rules
 
-RUN find / -type f -name libLibJackM.so
+RUN find / -type f -name libLabJackM.so
 
 ENV PATH="/root/.cargo/bin:${PATH}"
 
