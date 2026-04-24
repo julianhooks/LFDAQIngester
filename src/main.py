@@ -26,7 +26,7 @@ def setup() -> tuple[int]:
     #setup returns
     labjackHandle = 0
     instruments = []
-    questdbIngestHandle = None
+    questDBHandle = None
 
     # Setup logging
     #logging.basicConfig(filename=f'{__name__}.log', level=logging.DEBUG)
