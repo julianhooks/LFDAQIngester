@@ -114,6 +114,7 @@ def onexit(labjackHandle, questDBHandle):
     try:
         ljm.close(labjackHandle)
         questDBHandle.close()
+        logging.info("Closed QuestDB, closed LabJack")
     except ljm.LJMError as error:
         logging.error(f"Error occured when disconnecting from LabJack: {error}.")
         raise error
@@ -139,7 +140,7 @@ def ingestLoop(instruments,labJackHandle,questDBHandle):
                     'UncalibratedValue': uncalibratedValue,
                     'CalibratedValue': calibratedValue},
                 at=questdb.ingress.TimestampNanos.now())
-        questDBHandle.flust()
+        questDBHandle.flush()
 
 def main() -> None:
     instruments, labJackHandle, questDBHandle = setup()
