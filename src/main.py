@@ -100,10 +100,10 @@ def setup() -> tuple[int]:
     # enable below and jump DAC1 to DIO0 to test counter
     # ljm.eWriteName(labjackHandle,"DAC1_FREQUENCY_OUT_ENABLE",1)
 
-    global timer1
-    timer1 = enableTimer()
-    global timer2
-    timer1 = enableTimer()
+    # global timer1
+    # timer1 = enableTimer()
+    # global timer2
+    # timer1 = enableTimer()
 
     return labjackHandle, instruments, questDBHandle
     
