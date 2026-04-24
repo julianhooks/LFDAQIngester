@@ -76,6 +76,7 @@ def setup() -> tuple[int]:
             9000, 
             username='admin', 
             password='quest')
+        logging.info(f"Connected to QuestDB influx port")
     except questdb.ingress.IngressError as error:
         logging.error(f"Error occured when connecting to questDB: {error}.")
         raise error
@@ -107,7 +108,7 @@ def setup() -> tuple[int]:
     # global timer2
     # timer1 = enableTimer()
 
-    questDBHandle.connect()
+    questDBHandle.__enter__()
     return instruments, labjackHandle, questDBHandle
     
 # [IN-PROGRESS] Exit cleanly on error (+ give me logs of what's going on) 
