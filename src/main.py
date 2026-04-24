@@ -5,10 +5,10 @@ import logging
 from dataclasses import dataclass
 import os
 
-global cf
-
 # [TO-DO] set up better logger config
 logger = logging.getLogger(__name__)
+
+functionNamespace = {}
 
 dburl=os.getenv("DBURL")
 labjackURL='jackjack.lan'
@@ -40,7 +40,7 @@ def setup() -> tuple[int]:
     # [DONE] Connect to QuestDB for queries
     # getInstruments(dbconfigs) -> list[Instruments]:
     with pg.connect(
-            host=dburl, 
+            host=dburl
             port=8812, 
             user='admin', 
             password='quest',
@@ -56,12 +56,13 @@ def setup() -> tuple[int]:
             instrumentTable = cursor.fetchall()
             for row in instrumentTable:
                 exec("cf = " + row["CalibrationFunction"])
+                exec("cf = "+ row["CalibrationFunction"],functionNamespace),
                 instruments.append(
                         Instrument(
                             row["InstrumentID"],
                             row["InstrumentName"],
-                            cf,
                             bool(row["IsActive"]),
+                            functionNamespace["cf"],
                             row["Unit"],
                             bool(row["IsLabJack"]),
                             row["LabJackPort"]))
