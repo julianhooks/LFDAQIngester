@@ -80,7 +80,6 @@ def setup() -> tuple[int]:
 
     # [DONE] connect to Labjack
     # getLabJackHandle() -> int:
-    print(ljm.listAll("ANY","ANY"))
     try:
         labjackHandle = ljm.openS("T7","ANY","ANY")
     except ljm.LJMError as error:
@@ -105,7 +104,7 @@ def setup() -> tuple[int]:
     # global timer2
     # timer1 = enableTimer()
 
-    return labjackHandle, instruments, questDBHandle
+    return instruments, labjackHandle, questDBHandle
     
 # [IN-PROGRESS] Exit cleanly on error (+ give me logs of what's going on) 
 def onexit(labjackHandle, questDBHandle):
