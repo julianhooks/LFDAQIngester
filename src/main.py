@@ -5,6 +5,8 @@ import logging
 from dataclasses import dataclass
 import os
 
+global cf
+
 # [TO-DO] set up better logger config
 logger = logging.getLogger(__name__)
 
