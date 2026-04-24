@@ -59,8 +59,8 @@ def setup() -> tuple[int]:
                         Instrument(
                             row["InstrumentID"],
                             row["InstrumentName"],
-                            bool(row["IsActive"]),
                             functionNamespace["cf"],
+                            bool(row["IsActive"]),
                             row["Unit"],
                             bool(row["IsLabJack"]),
                             row["LabJackPort"]))
