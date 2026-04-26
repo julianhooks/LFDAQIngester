@@ -4,13 +4,14 @@ import psycopg as pg
 import logging
 from dataclasses import dataclass
 import os
-from time import time
+from time import time, sleep
 
 # [TO-DO] set up better logger config
 logger = logging.getLogger(__name__)
 
 dburl=os.getenv("DBURL")
 labjackURL='jackjack.lan'
+loopDelayms = 50
     
 lastTime = []
 
@@ -154,6 +155,7 @@ def ingestLoop(instruments,labJackHandle,questDBHandle):
                     'CalibratedValue': calibratedValue},
                 at=questdb.ingress.TimestampNanos.now())
     questDBHandle.flush()
+    sleep(loopDelayms/1000.0)
 
 def main() -> None:
     instruments, labJackHandle, questDBHandle = setup()
