@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 dburl=os.getenv("DBURL")
 labjackURL='jackjack.lan'
-loopDelayms = 50
+loopDelayms =os.getenv("LOOPDELAY")
     
 lastTime = []
 
@@ -25,7 +25,6 @@ class Instrument:
     Unit: str
     IsLabJack: bool
     LabJackPort: str
-
 
 def enableTimer() -> int:
     lastTime.append(time())
