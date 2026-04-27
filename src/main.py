@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 dburl=os.getenv("DBURL")
 labjackURL='jackjack.lan'
-loopDelayms =os.getenv("LOOPDELAY")
+loopDelayms =int(os.getenv("LOOPDELAY"))
     
 lastTime = []
 
