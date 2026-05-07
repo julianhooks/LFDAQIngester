@@ -1,7 +1,8 @@
 services:
-  server:
+  ingester:
     build:
       context: .
     environment:
       - DBURL=liquids.lan
+      - LOOPDELAY=1000 
     network_mode: host
