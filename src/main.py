@@ -66,6 +66,8 @@ def setup() -> tuple[int]:
             cursor.execute("SELECT * FROM Instruments")
             instrumentTable = cursor.fetchall()
             for row in instrumentTable:
+                if (bool(row["IsLabJack"]) == False or bool(row["IsActive"]) == False):
+                    continue
                 functionNamespace = {}
                 exec("cf = "+ row["CalibrationFunction"],functionNamespace)
                 instruments.append(
