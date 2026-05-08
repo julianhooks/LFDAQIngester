@@ -2,7 +2,7 @@
 
 `[{status}] _{date}_ {assigner git user} to {assignee git user}` 
 
-[TO-DO] _05/07/2026_ @julianhooks to @julianhooks 
+[DONE] _05/07/2026_ @julianhooks to @julianhooks 
 - Fix bug in instrument loading loop where all instruments are loaded regardless of active status or labjack status.
 
 [TO-DO] _05/07/2026_ @julianhooks to @julianhooks
