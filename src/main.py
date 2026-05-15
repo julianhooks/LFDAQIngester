@@ -8,14 +8,17 @@ from labjack import ljm
 import questdb.ingress
 import psycopg as pg
 
+# Start logger
 # [TO-DO] set up better logger config
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
+logger.info("Started Logging")
 
+# Get environment variables
 dburl=os.getenv("DBURL")
 labjackURL='jackjack.lan'
 loopDelayms =int(os.getenv("LOOPDELAY"))
     
-# [DONE] finish this dataclass
 @dataclass
 class Instrument:
     InstrumentID: Annotated[str,"QuestDB Symbol"]
@@ -30,16 +33,14 @@ def setup() -> tuple[
     list[Instrument],
     Annotated[int,"LabJack connection handle."],
     questdb.ingress.Sender]:
-
+ 
     #setup function returns
     labjackHandle = 0
+    # labjackHandle = getLabJack()
     instruments = []
+    # instruments = getInstruments()
     questDBHandle = None
-
-    # Setup logging
-    #logging.basicConfig(filename=f'{__name__}.log', level=logging.DEBUG)
-    logging.basicConfig(level=logging.DEBUG)
-    logger.info("Started Logging")
+    # questDBHandle = get
 
     # [DONE] Connect to QuestDB for queries
     # getInstruments(dbconfigs) -> list[Instruments]:
