@@ -138,7 +138,7 @@ def ingestLoop(instruments: list[Instrument],
     sleep(loopDelayms/1000.0)
 
 # [IN-PROGRESS] Exit cleanly on error (+ give me logs of what's going on) 
-def onexit(labjackHandle: Annotated[int,"LabJack connection handle."], questDBHandle: questdb.ingress.Sender) -> None:
+def onexit(labjackHandle: Annotated[int,"LabJack connection handle."]) -> None:
     try:
         ljm.close(labjackHandle)
         logging.info("Closed QuestDB, closed LabJack")
@@ -158,7 +158,7 @@ def main() -> None:
             while(True):
                 ingestLoop(instruments,labJackHandle,questDBHandle)
         finally:
-            onexit(labJackHandle,questDBHandle)
+            onexit(labJackHandle)
     return
 
 if (__name__ == "__main__"):
