@@ -1,10 +1,12 @@
-from labjack import ljm
-import questdb.ingress
-import psycopg as pg
 import logging
 from dataclasses import dataclass
 import os
 from time import time, sleep
+from typing import Annotated
+
+from labjack import ljm
+import questdb.ingress
+import psycopg as pg
 
 # [TO-DO] set up better logger config
 logger = logging.getLogger(__name__)
@@ -13,30 +15,23 @@ dburl=os.getenv("DBURL")
 labjackURL='jackjack.lan'
 loopDelayms =int(os.getenv("LOOPDELAY"))
     
-lastTime = []
-
 # [DONE] finish this dataclass
 @dataclass
 class Instrument:
-    InstrumentID: str
+    InstrumentID: Annotated[str,"QuestDB Symbol"]
     InstrumentName: str
-    CalibrationFunction: callable
+    CalibrationFunction: Annotated[callable,"With functions included from calibration.py"]
     IsActive: bool
     Unit: str
     IsLabJack: bool
-    LabJackPort: str
+    LabJackPort: Annotated[str,"LabJack connection handle."]
 
-def enableTimer() -> int:
-    lastTime.append(time())
-    return len(lastTime) - 1
+def setup() -> tuple[
+    list[Instrument],
+    Annotated[int,"LabJack connection handle."],
+    questdb.ingress.Sender]:
 
-def getElapsedTime(timer:int) -> float:
-    deltaTime = time() - lastTime[timer]
-    lastTime[timer] = time()
-    return deltaTime
-
-def setup() -> tuple[int]:
-    #setup returns
+    #setup function returns
     labjackHandle = 0
     instruments = []
     questDBHandle = None
@@ -46,8 +41,6 @@ def setup() -> tuple[int]:
     logging.basicConfig(level=logging.DEBUG)
     logger.info("Started Logging")
 
-    # Program needs to do a couple things
-    
     # [DONE] Connect to QuestDB for queries
     # getInstruments(dbconfigs) -> list[Instruments]:
     with pg.connect(
@@ -118,14 +111,11 @@ def setup() -> tuple[int]:
     # enable below and jump DAC1 to DIO0 to test counter
     # ljm.eWriteName(labjackHandle,"DAC1_FREQUENCY_OUT_ENABLE",1)
     
-    global timer1
-    timer1 = enableTimer()
-
     questDBHandle.__enter__()
     return instruments, labjackHandle, questDBHandle
     
 # [IN-PROGRESS] Exit cleanly on error (+ give me logs of what's going on) 
-def onexit(labjackHandle, questDBHandle):
+def onexit(labjackHandle: Annotated[int,"LabJack connection handle."], questDBHandle: questdb.ingress.Sender) -> None:
     try:
         ljm.close(labjackHandle)
         questDBHandle.close()
@@ -137,17 +127,18 @@ def onexit(labjackHandle, questDBHandle):
         logging.error(f"Error occured when connecting to questDB: {error}.")
         raise error
 
-# [IN-PROGRESS] Perform data ingestion:
+# [DONE] Perform data ingestion:
 # - Get voltages of each active instrument
 # - Run calibration function on voltage
 # - Write (time,voltage,value) to each instrument table
 # - Repeat until close
-def ingestLoop(instruments,labJackHandle,questDBHandle):
+def ingestLoop(instruments: list[Instrument],
+               labJackHandle: Annotated[int,"LabJack connection handle."],
+               questDBHandle: questdb.ingress.Sender) -> None:
+
     for instrument in instruments:
-        
         uncalibratedValue = ljm.eReadName(labJackHandle, instrument.LabJackPort)
         calibratedValue = instrument.CalibrationFunction(uncalibratedValue)
-        
         questDBHandle.row(
                 'InstrumentValues',
                 symbols={'InstrumentID': instrument.InstrumentID},
