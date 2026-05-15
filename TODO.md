@@ -2,8 +2,11 @@
 
 `[{status}] _{date}_ {assigner git user} to {assignee git user}` 
 
-**[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
+**[IN-PROGRESS]** _05/07/2026_ @julianhooks to @julianhooks
 - Refactor `setup()` into `getInstruments()` `getLabJack()` `getIngestHandle()` `userConfig()`
+- May make `userConfig()` into `setup()` and move non-user adjustable setup tasks into `main()`
+  - Seems cleaner this way
+- Also needed to update onexit to account for `getIngestHandle()` making it possible to refactor away from mnually calling `__enter__` in `setup`
 
 **[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
 - Fix over-flushing bug in questDB ingress handler
