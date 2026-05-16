@@ -2,10 +2,6 @@
 
 `**[{status}]** _{date_assigned}_ -> _{date_completed}_ {assigner git user} to {assignee git user}` 
 
-**[IN-PROGRESS]** _05/07/2026_ @julianhooks to @julianhooks
-- Fix over-flushing bug in questDB ingress handler
-  - There is an autoflush option for the handler that we should turn on
-
 **[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
 - Set up a better logging configuration (debug level in stream when in debug mode, info level in file and stream when in prod)
 
@@ -39,3 +35,7 @@
 - May make `userConfig()` into `setup()` and move non-user adjustable setup tasks into `main()`
   - Seems cleaner this way
 - Also needed to update onexit to account for `getIngestHandle()` making it possible to refactor away from mnually calling `__enter__` in `setup`
+
+**[DONE]** _05/07/2026_ -> _05/15/2026_ @julianhooks to @julianhooks
+- Fix over-flushing bug in questDB ingress handler
+  - There is an autoflush option for the handler that we should turn on
