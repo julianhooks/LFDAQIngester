@@ -27,7 +27,7 @@ logger.addHandler(logStream)
 logger.info("Started Logging")
 
 # Get environment variables
-loopDelayms = os.getenv("LFDAQ_DB_LOOP_DELAY_MS")
+loopDelayms = int(os.getenv("LFDAQ_DB_LOOP_DELAY_MS"))
     
 @dataclass
 class Instrument:
@@ -72,7 +72,7 @@ def getInstruments() -> list[Instrument]:
     # [TO-DO] make these setups parameters .env variables 
     with pg.connect(
             host=os.getenv("LFDAQ_DB_URL"),
-            port=os.getenv("LFDAQ_DB_PG_PORT"), 
+            port=int(os.getenv("LFDAQ_DB_PG_PORT")), 
             user=os.getenv("LFDAQ_DB_USERNAME"), 
             password=os.getenv("LFDAQ_DB_PASSWORD"),
             dbname=os.getenv("LFDAQ_DB_NAME"), 
@@ -115,7 +115,7 @@ def getQuestDBHandle() -> questdb.ingress.Sender:
         questDBHandle = questdb.ingress.Sender(
             questdb.ingress.Protocol.Http, 
             os.getenv("LFDAQ_DB_URL"), 
-            os.getenv("LFDAQ_DB_INFLUX_PORT"), 
+            int(os.getenv("LFDAQ_DB_INFLUX_PORT")), 
             username=os.getenv("LFDAQ_DB_USERNAME"), 
             password=os.getenv("LFDAQ_DB_PASSWORD"))
         logger.info(f"Connected to QuestDB influx port")
@@ -125,8 +125,8 @@ def getQuestDBHandle() -> questdb.ingress.Sender:
     
     # [IN-PROGRESS] set up auto-flushing settings for this handle
     questDBHandle.auto_flush = True
-    questDBHandle.auto_flush_interval = os.getenv("LFDAQ_DB_AUTOFLUSH_INTERVAL_MS") 
-    questDBHandle.auto_flush_rows = os.getenv("LFDAQ_DB_AUTOFLUSH_ROWS") 
+    questDBHandle.auto_flush_interval = int(os.getenv("LFDAQ_DB_AUTOFLUSH_INTERVAL_MS")) 
+    questDBHandle.auto_flush_rows = int(os.getenv("LFDAQ_DB_AUTOFLUSH_ROWS")) 
 
     return questDBHandle
 
