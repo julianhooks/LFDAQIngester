@@ -29,7 +29,7 @@ logger.info("Started Logging")
 # Get environment variables
 dburl=os.getenv("DBURL")
 labjackURL='jackjack.lan'
-# loopDelayms =int(os.getenv("LOOPDELAY"))
+loopDelayms =int(os.getenv("LOOPDELAY"))
     
 @dataclass
 class Instrument:
@@ -119,17 +119,16 @@ def getQuestDBHandle(dbURL: Annotated[str,"URL"]) -> questdb.ingress.Sender:
             dbURL, 
             9000, 
             username='admin', 
-            password='quest')
+            password='quest',
+            auto_flush=True,
+            auto_flush_interval=100,
+            auto_flush_rows=100)
         logger.info(f"Connected to QuestDB influx port")
     except questdb.ingress.IngressError as error:
         logger.error(f"Error occured when connecting to questDB: {error}.")
         raise error
     
     # [IN-PROGRESS] set up auto-flushing settings for this handle
-    questDBHandle.auto_flush = True
-    questDBHandle.auto_flush_interval = 100
-    questDBHandle.auto_flush_rows = 100
-
     return questDBHandle
 
 # [DONE] Perform data ingestion:
