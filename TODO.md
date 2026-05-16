@@ -2,10 +2,6 @@
 
 `**[{status}]** _{date_assigned}_ -> _{date_completed}_ {assigner git user} to {assignee git user}` 
 
-**[IN-PROGRESS]** _05/07/2026_ @julianhooks to @julianhooks
-- Set up environment variables for implementation specific or run specific information
-- Fix `getInstruments()`, `getIngestHandle` to get login credentials from environment variables
-
 **[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
 - Develop testing plan in testing.md 
 
@@ -41,3 +37,9 @@
 **[DONE]** _05/07/2026_ -> _05/15/2026_ @julianhooks to @julianhooks
 - Set up a better logging configuration (debug level in stream when in debug mode, info level in file and stream when in prod)
 - Pulling some recipes from [this doc](https://docs.python.org/3/howto/logging-cookbook.html)
+
+**[DONE]** _05/07/2026_ -> _5/16/2026_ @julianhooks to @julianhooks
+- Set up environment variables for implementation specific or run specific information
+  - Placed all environment variables in `.env`, with preface `LFDAQ_`
+  - Added defaults in dockerfile so cloning `.env` into `DAQService` is not necesary
+- Fix `getInstruments()`, `getIngestHandle` to get login credentials from environment variables
