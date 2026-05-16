@@ -2,7 +2,7 @@
 
 `**[{status}]** _{date_assigned}_ -> _{date_completed}_ {assigner git user} to {assignee git user}` 
 
-**[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
+**[IN-PROGRESS]** _05/07/2026_ @julianhooks to @julianhooks
 - Fix over-flushing bug in questDB ingress handler
   - There is an autoflush option for the handler that we should turn on
 

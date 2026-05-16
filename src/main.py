@@ -57,7 +57,7 @@ def getInstruments(dbURL: Annotated[str,"URL"]) -> list[Instrument]:
     instruments = []
     functionNamespace = {}
 
-    # [TO-DO] make these env variables 
+    # [TO-DO] make these setups parameters .env variables 
     with pg.connect(
             host=dbURL,
             port=8812, 
@@ -111,7 +111,10 @@ def getQuestDBHandle(dbURL: Annotated[str,"URL"]) -> questdb.ingress.Sender:
         logging.error(f"Error occured when connecting to questDB: {error}.")
         raise error
     
-    # [TO-DO] set up auto-flushing settings for this handle
+    # [IN-PROGRESS] set up auto-flushing settings for this handle
+    questDBHandle.auto_flush = True
+    questDBHandle.auto_flush_interval = 100
+    questDBHandle.auto_flush_rows = 100
 
     return questDBHandle
 
@@ -134,7 +137,6 @@ def ingestLoop(instruments: list[Instrument],
                     'UncalibratedValue': uncalibratedValue,
                     'CalibratedValue': calibratedValue},
                 at=questdb.ingress.TimestampNanos.now())
-    questDBHandle.flush()
     sleep(loopDelayms/1000.0)
 
 # [IN-PROGRESS] Exit cleanly on error (+ give me logs of what's going on) 
