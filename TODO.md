@@ -2,7 +2,8 @@
 
 `**[{status}]** _{date_assigned}_ -> _{date_completed}_ {assigner git user} to {assignee git user}` 
 
-**[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
+**[IN-PROGRESS]** _05/07/2026_ @julianhooks to @julianhooks
+- Set up environment variables for implementation specific or run specific information
 - Fix `getInstruments()`, `getIngestHandle` to get login credentials from environment variables
 
 **[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
