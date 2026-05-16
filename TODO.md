@@ -3,9 +3,6 @@
 `**[{status}]** _{date_assigned}_ -> _{date_completed}_ {assigner git user} to {assignee git user}` 
 
 **[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
-- Set up a better logging configuration (debug level in stream when in debug mode, info level in file and stream when in prod)
-
-**[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
 - Fix `getInstruments()`, `getIngestHandle` to get login credentials from environment variables
 
 **[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
@@ -39,3 +36,7 @@
 **[DONE]** _05/07/2026_ -> _05/15/2026_ @julianhooks to @julianhooks
 - Fix over-flushing bug in questDB ingress handler
   - There is an autoflush option for the handler that we should turn on
+
+**[DONE]** _05/07/2026_ -> _05/15/2026_ @julianhooks to @julianhooks
+- Set up a better logging configuration (debug level in stream when in debug mode, info level in file and stream when in prod)
+- Pulling some recipes from [this doc](https://docs.python.org/3/howto/logging-cookbook.html)

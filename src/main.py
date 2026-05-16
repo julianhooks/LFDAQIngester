@@ -11,13 +11,25 @@ import psycopg as pg
 # Start logger
 # [TO-DO] set up better logger config
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
+
+logFormatter = logging.Formatter('%(asctime)s   :%(levelname)s:%(name)s: %(message)s')
+
+logFile = logging.FileHandler(f'{__name__}.log')
+logFile.setLevel(logging.DEBUG)
+logFile.setFormatter(logFormatter)
+logger.addHandler(logFile)
+
+logStream = logging.StreamHandler()
+logStream.setLevel(logging.DEBUG)
+logStream.setFormatter(logFormatter)
+logger.addHandler(logStream)
+
 logger.info("Started Logging")
 
 # Get environment variables
 dburl=os.getenv("DBURL")
 labjackURL='jackjack.lan'
-loopDelayms =int(os.getenv("LOOPDELAY"))
+# loopDelayms =int(os.getenv("LOOPDELAY"))
     
 @dataclass
 class Instrument:
@@ -34,10 +46,12 @@ def setup(labJackHandle: Annotated[int,"LabJack connection handle."]) -> None:
     ljm.eWriteName(labJackHandle,"DIO0_EF_ENABLE",0)
     ljm.eWriteName(labJackHandle,"DIO0_EF_INDEX",8)
     ljm.eWriteName(labJackHandle,"DIO0_EF_ENABLE",1)
+    logger.info("Enabled timer 0")
     
     ljm.eWriteName(labJackHandle,"DIO1_EF_ENABLE",0)
     ljm.eWriteName(labJackHandle,"DIO1_EF_INDEX",8)
     ljm.eWriteName(labJackHandle,"DIO1_EF_ENABLE",1)
+    logger.info("Enabled timer 1")
 
     # enable below and jump DAC1 to DIO0 to test counter
     # ljm.eWriteName(labJackHandle,"DAC1_FREQUENCY_OUT_ENABLE",1)
@@ -46,9 +60,9 @@ def getLabJack(labjackURL: Annotated[str,"URL"]) -> Annotated[int,"LabJack conne
     try:
         labjackHandle = ljm.openS("T7","ANY","ANY")
     except ljm.LJMError as error:
-        logging.error(f"Error occured when connecting to LabJack: {error}.")
+        logger.error(f"Error occured when connecting to LabJack: {error}.")
         raise error
-    logging.info(f"Connected to LabJack on {ljm.getHandleInfo(labjackHandle)}.")
+    logger.info(f"Connected to LabJack on {ljm.getHandleInfo(labjackHandle)}.")
     return labjackHandle
 
 def getInstruments(dbURL: Annotated[str,"URL"]) -> list[Instrument]:
@@ -72,7 +86,7 @@ def getInstruments(dbURL: Annotated[str,"URL"]) -> list[Instrument]:
             ) as cursor:
             cursor.execute("SELECT version")
             version = cursor.fetchone()
-            logging.info(f'Connected to QuestDB version: {version["version"]}')
+            logger.info(f'Connected to QuestDB version: {version["version"]}')
            
             # Pull all instruments (labjack port + calibration eq + database stuff) from database
             cursor.execute("SELECT * FROM Instruments")
@@ -106,9 +120,9 @@ def getQuestDBHandle(dbURL: Annotated[str,"URL"]) -> questdb.ingress.Sender:
             9000, 
             username='admin', 
             password='quest')
-        logging.info(f"Connected to QuestDB influx port")
+        logger.info(f"Connected to QuestDB influx port")
     except questdb.ingress.IngressError as error:
-        logging.error(f"Error occured when connecting to questDB: {error}.")
+        logger.error(f"Error occured when connecting to questDB: {error}.")
         raise error
     
     # [IN-PROGRESS] set up auto-flushing settings for this handle
@@ -143,9 +157,9 @@ def ingestLoop(instruments: list[Instrument],
 def onexit(labjackHandle: Annotated[int,"LabJack connection handle."]) -> None:
     try:
         ljm.close(labjackHandle)
-        logging.info("Closed QuestDB, closed LabJack")
+        logger.info("Closed QuestDB, closed LabJack")
     except ljm.LJMError as error:
-        logging.error(f"Error occured when disconnecting from LabJack: {error}.")
+        logger.error(f"Error occured when disconnecting from LabJack: {error}.")
         raise error
 
 def main() -> None:
