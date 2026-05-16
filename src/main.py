@@ -27,9 +27,7 @@ logger.addHandler(logStream)
 logger.info("Started Logging")
 
 # Get environment variables
-dburl=os.getenv("DBURL")
-labjackURL='jackjack.lan'
-# loopDelayms =int(os.getenv("LOOPDELAY"))
+loopDelayms = os.getenv("LFDAQ_DB_LOOP_DELAY_MS")
     
 @dataclass
 class Instrument:
@@ -56,7 +54,7 @@ def setup(labJackHandle: Annotated[int,"LabJack connection handle."]) -> None:
     # enable below and jump DAC1 to DIO0 to test counter
     # ljm.eWriteName(labJackHandle,"DAC1_FREQUENCY_OUT_ENABLE",1)
 
-def getLabJack(labjackURL: Annotated[str,"URL"]) -> Annotated[int,"LabJack connection handle."]:
+def getLabJack() -> Annotated[int,"LabJack connection handle."]:
     try:
         labjackHandle = ljm.openS("T7","ANY","ANY")
     except ljm.LJMError as error:
@@ -65,7 +63,7 @@ def getLabJack(labjackURL: Annotated[str,"URL"]) -> Annotated[int,"LabJack conne
     logger.info(f"Connected to LabJack on {ljm.getHandleInfo(labjackHandle)}.")
     return labjackHandle
 
-def getInstruments(dbURL: Annotated[str,"URL"]) -> list[Instrument]:
+def getInstruments() -> list[Instrument]:
     # Connect to QuestDB for queries
     
     instruments = []
@@ -73,11 +71,11 @@ def getInstruments(dbURL: Annotated[str,"URL"]) -> list[Instrument]:
 
     # [TO-DO] make these setups parameters .env variables 
     with pg.connect(
-            host=dbURL,
-            port=8812, 
-            user='admin', 
-            password='quest',
-            dbname='LiquidsTestStand', 
+            host=os.getenv("LFDAQ_DB_URL"),
+            port=os.getenv("LFDAQ_DB_PG_PORT"), 
+            user=os.getenv("LFDAQ_DB_USERNAME"), 
+            password=os.getenv("LFDAQ_DB_PASSWORD"),
+            dbname=os.getenv("LFDAQ_DB_NAME"), 
             autocommit=True
             ) as connector:
         with connector.cursor(
@@ -108,7 +106,7 @@ def getInstruments(dbURL: Annotated[str,"URL"]) -> list[Instrument]:
     return instruments
 
 # [DONE] connect to QuestDB for sending
-def getQuestDBHandle(dbURL: Annotated[str,"URL"]) -> questdb.ingress.Sender:
+def getQuestDBHandle() -> questdb.ingress.Sender:
     # we do want to use http here, not tcp, because more functionality is available for http
     # this uses the influx line protocol, not postgres
     
@@ -116,10 +114,10 @@ def getQuestDBHandle(dbURL: Annotated[str,"URL"]) -> questdb.ingress.Sender:
     try:
         questDBHandle = questdb.ingress.Sender(
             questdb.ingress.Protocol.Http, 
-            dbURL, 
-            9000, 
-            username='admin', 
-            password='quest')
+            os.getenv("LFDAQ_DB_URL"), 
+            os.getenv("LFDAQ_DB_INFLUX_PORT"), 
+            username=os.getenv("LFDAQ_DB_USERNAME"), 
+            password=os.getenv("LFDAQ_DB_PASSWORD"))
         logger.info(f"Connected to QuestDB influx port")
     except questdb.ingress.IngressError as error:
         logger.error(f"Error occured when connecting to questDB: {error}.")
@@ -127,8 +125,8 @@ def getQuestDBHandle(dbURL: Annotated[str,"URL"]) -> questdb.ingress.Sender:
     
     # [IN-PROGRESS] set up auto-flushing settings for this handle
     questDBHandle.auto_flush = True
-    questDBHandle.auto_flush_interval = 100
-    questDBHandle.auto_flush_rows = 100
+    questDBHandle.auto_flush_interval = os.getenv("LFDAQ_DB_AUTOFLUSH_INTERVAL_MS") 
+    questDBHandle.auto_flush_rows = os.getenv("LFDAQ_DB_AUTOFLUSH_ROWS") 
 
     return questDBHandle
 
@@ -164,12 +162,12 @@ def onexit(labjackHandle: Annotated[int,"LabJack connection handle."]) -> None:
 
 def main() -> None:
     
-    labJackHandle = getLabJack(labjackURL)
-    instruments = getInstruments(dburl)
+    instruments = getInstruments()
+    labJackHandle = getLabJack()
     
     setup(labJackHandle)
 
-    with getQuestDBHandle(dburl) as questDBHandle:
+    with getQuestDBHandle() as questDBHandle:
         try:
             while(True):
                 ingestLoop(instruments,labJackHandle,questDBHandle)
