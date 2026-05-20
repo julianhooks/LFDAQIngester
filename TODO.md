@@ -15,6 +15,10 @@
 **[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
 - Fix DOCKERFILE to install correct drivers for system architecture
 
+**[TO-DO]** _05/20/2026_ @julianhooks to @julianhooks
+- Modify `ingestLoop()` to use a pandas dataframe to store data instead of using individual rows populated during the instrument loop
+  - Docs say this should increase performance, and it is the preferred method for sending data
+
 **[TO-DO]** _05/15/2026_ @julianhooks to @julianhooks
 - Add docstrings to existing functions
 
