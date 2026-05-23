@@ -69,9 +69,8 @@ class dbTest(unittest.TestCase):
             os.environ.pop("LFDAQ_DB_AUTOFLUSH_INTERVAL_MS")
             os.environ.pop("LFDAQ_DB_AUTOFLUSH_ROWS")
 
-            questDBInstance.stop()
-
             # Cleanup test database
+            questDBInstance.stop()
 
         return
     
