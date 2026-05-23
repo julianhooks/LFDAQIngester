@@ -1,5 +1,6 @@
 import logging
 import os
+import unittest
 from time import sleep
 from typing import Annotated
 
@@ -56,3 +57,16 @@ def onExit(labjackHandle: Annotated[int,"LabJack connection handle."]) -> None:
     except ljm.LJMError as error:
         logger.error(f"Error occured when disconnecting from LabJack: {error}.")
         raise error
+
+class ingesterTest(unittest.TestCase):
+
+    def runTest(self):
+        # loop is calling calibration functions properly
+        # loop is calling ereadvoltages properly
+        # loop is writing to db properly
+        # loop is waiting properly
+        return
+
+
+if (__name__ == "__main__"):
+    unittest.main()
