@@ -79,7 +79,7 @@ class InstrumentTests(unittest.TestCase):
                                                              9003:9003})
 
         # Give the container some time to set up before we test
-        time.sleep(10)
+        time.sleep(4)
         
         # Add test data for good instrument
         testInstrument = Instrument(
@@ -120,21 +120,21 @@ class InstrumentTests(unittest.TestCase):
                     cursor.execute(
                         """
                         INSERT INTO Instruments (
-                                   InstrumentID, 
-                                   InstrumentName, 
-                                   CalibrationFunction, 
-                                   Unit, 
-                                   IsActive, 
-                                   IsLabJack, 
-                                   LabJackPort )
-                                   VALUES (
-                                   %s,
-                                   %s,
-                                   %s,
-                                   %s,
-                                   %s,
-                                   %s,
-                                   %s )
+                          InstrumentID, 
+                          InstrumentName, 
+                          CalibrationFunction, 
+                          Unit, 
+                          IsActive, 
+                          IsLabJack, 
+                          LabJackPort )
+                        VALUES (
+                          %s,
+                          %s,
+                          %s,
+                          %s,
+                          %s,
+                          %s,
+                          %s )
                         """, 
                         [testInstrument.InstrumentID,
                          testInstrument.InstrumentName,
@@ -145,10 +145,13 @@ class InstrumentTests(unittest.TestCase):
                          testInstrument.LabJackPort])
 
                 instrumentList = getInstruments()
-                # These tests don't work but the above process does
-                self.assertIsNotNone(instrumentList)
-                self.assertEqual(instrumentList[0],testInstrument)
-                # This is failing because the two lambda functions are in different namespaces
+                self.assertEqual(instrumentList[0].InstrumentID,testInstrument.InstrumentID)
+                self.assertEqual(instrumentList[0].InstrumentName,testInstrument.InstrumentName)
+                self.assertEqual(instrumentList[0].Unit,testInstrument.Unit)
+                self.assertEqual(instrumentList[0].IsActive,testInstrument.IsActive)
+                self.assertEqual(instrumentList[0].IsLabJack,testInstrument.IsLabJack)
+                self.assertEqual(instrumentList[0].LabJackPort,testInstrument.LabJackPort)
+                self.assertEqual(instrumentList[0].CalibrationFunction(1),testInstrument.CalibrationFunction(1))
             
         finally:
             os.environ.pop("LFDAQ_DB_URL")
