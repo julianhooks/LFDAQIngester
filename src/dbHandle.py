@@ -1,6 +1,9 @@
 import logging
 import os
+import unittest
+import time
 
+import docker
 from labjack import ljm
 import questdb.ingress
 
@@ -26,3 +29,49 @@ def getQuestDBHandle() -> questdb.ingress.Sender:
         raise error
     
     return questDBHandle
+
+class dbTest(unittest.TestCase):
+
+    def runTest(self) -> None:
+        # Set relevant environment variables for test
+        os.environ["LFDAQ_DB_URL"] = "127.0.0.1"
+        os.environ["LFDAQ_DB_INFLUX_PORT"] = "9000"
+        os.environ["LFDAQ_DB_USERNAME"] = "admin"
+        os.environ["LFDAQ_DB_PASSWORD"] = "quest"
+        os.environ["LFDAQ_DB_AUTOFLUSH_INTERVAL_MS"] = "1000"
+        os.environ["LFDAQ_DB_AUTOFLUSH_ROWS"] = "10"
+
+        # Start test database
+        dockerClient = docker.from_env()
+        questDBInstance = dockerClient.containers.run("questdb/questdb", 
+                                                      detach = True, 
+                                                      ports={9000:9000,9009:9009,8812:8812,9003:9003})
+
+        # Give the container some time to set up before we test
+        time.sleep(3)
+
+        try:
+            result = getQuestDBHandle() 
+            self.assertIsInstance(result,questdb.ingress.Sender)
+            with result as handle:
+                dbLogs = str(questDBInstance.logs())
+                print(dbLogs)
+                self.assertTrue(("http-server connected" in dbLogs))
+
+        finally:
+            # Make sure to clean up unneeded environment variables 
+            os.environ.pop("LFDAQ_DB_URL")
+            os.environ.pop("LFDAQ_DB_INFLUX_PORT")
+            os.environ.pop("LFDAQ_DB_USERNAME")
+            os.environ.pop("LFDAQ_DB_PASSWORD")
+            os.environ.pop("LFDAQ_DB_AUTOFLUSH_INTERVAL_MS")
+            os.environ.pop("LFDAQ_DB_AUTOFLUSH_ROWS")
+
+            questDBInstance.stop()
+
+            # Cleanup test database
+
+        return
+    
+if (__name__ == "__main__"):
+    unittest.main()
