@@ -1,6 +1,7 @@
 from time import time
 
-global lastTime = []
+global lastTime 
+lastTime = []
 
 def enableTimer() -> int:
     lastTime.append(time())
@@ -10,12 +11,3 @@ def getElapsedTime(timer:int) -> float:
     deltaTime = time() - lastTime[timer]
     lastTime[timer] = time()
     return deltaTime
-
-def config() -> None:
-    global timer1 = enableTimer()
-    global timer2 = enableTimer()
-    
-    # create getElapsedTime() for use with counter based systems
-
-
-
