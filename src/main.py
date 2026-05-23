@@ -36,7 +36,7 @@ def main() -> None:
             while(True):
                 ingestLoop(instruments,labJackHandle,questDBHandle)
         finally:
-            onexit(labJackHandle)
+            onExit(labJackHandle)
     return
 
 if (__name__ == "__main__"):
