@@ -43,9 +43,8 @@ def ingestLoop(instruments: list[Instrument],
         questDBHandle.row(
                 'InstrumentValues',
                 symbols={'InstrumentID': instrument.InstrumentID},
-                columns={
-                    'UncalibratedValue': uncalibratedValue,
-                    'CalibratedValue': calibratedValue},
+                columns={'UncalibratedValue': uncalibratedValue,
+                         'CalibratedValue': calibratedValue},
                 at=questdb.ingress.TimestampNanos.now())
     sleep(loopDelayms/1000.0)
 
