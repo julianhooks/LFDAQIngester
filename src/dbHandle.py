@@ -55,7 +55,6 @@ class dbTest(unittest.TestCase):
             self.assertIsInstance(result,questdb.ingress.Sender)
             with result as handle:
                 dbLogs = str(questDBInstance.logs())
-                print(dbLogs)
                 self.assertTrue(("http-server connected" in dbLogs))
 
         finally:
