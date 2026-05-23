@@ -12,7 +12,7 @@ I'd also like a way to verify changes do not break the docker image, preferably 
 
 ## TO-DO
 
-1. **[TO-DO]** split `main.py` into an appropriate number of files.
+1. **[DONE]** split `main.py` into an appropriate number of files.
 2. **[TO-DO]** write function level tests
 3. **[TO-DO]** Write project-level test suite into `tests.py`
 4. **[TO-DO]** Figure out docker compose based testing
