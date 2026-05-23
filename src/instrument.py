@@ -18,12 +18,9 @@ class Instrument:
     LabJackPort: Annotated[str,"LabJack connection handle."]
 
 def getInstruments() -> list[Instrument]:
-    # Connect to QuestDB for queries
-    
     instruments = []
     functionNamespace = {}
 
-    # [TO-DO] make these setups parameters .env variables 
     with pg.connect(
             host=os.getenv("LFDAQ_DB_URL"),
             port=int(os.getenv("LFDAQ_DB_PG_PORT")), 
@@ -40,7 +37,6 @@ def getInstruments() -> list[Instrument]:
             version = cursor.fetchone()
             logger.info(f'Connected to QuestDB version: {version["version"]}')
            
-            # Pull all instruments (labjack port + calibration eq + database stuff) from database
             cursor.execute("SELECT * FROM Instruments")
             instrumentTable = cursor.fetchall()
           

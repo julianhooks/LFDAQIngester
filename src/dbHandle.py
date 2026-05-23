@@ -10,7 +10,6 @@ def getQuestDBHandle() -> questdb.ingress.Sender:
     # we do want to use http here, not tcp, because more functionality is available for http
     # this uses the influx line protocol, not postgres
     
-    # [TO-DO] make these environment variables
     try:
         questDBHandle = questdb.ingress.Sender(
             questdb.ingress.Protocol.Http, 
@@ -26,5 +25,4 @@ def getQuestDBHandle() -> questdb.ingress.Sender:
         logger.error(f"Error occured when connecting to questDB: {error}.")
         raise error
     
-    # [IN-PROGRESS] set up auto-flushing settings for this handle
     return questDBHandle

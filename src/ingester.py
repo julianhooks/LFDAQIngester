@@ -25,7 +25,7 @@ def setup(labJackHandle: Annotated[int,"LabJack connection handle."]) -> None:
     # enable below and jump DAC1 to DIO0 to test counter
     # ljm.eWriteName(labJackHandle,"DAC1_FREQUENCY_OUT_ENABLE",1)
 
-# [DONE] Perform data ingestion:
+# Perform data ingestion:
 # - Get voltages of each active instrument
 # - Run calibration function on voltage
 # - Write (time,voltage,value) to each instrument table

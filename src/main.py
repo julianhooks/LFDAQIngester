@@ -8,7 +8,6 @@ from labjackHandler import getLabJack
 from instrument import getInstruments
 
 # Start logger
-# [TO-DO] set up better logger config
 logger = logging.getLogger(__name__)
 
 logFormatter = logging.Formatter('%(asctime)s   :%(levelname)s:%(name)s: %(message)s')
@@ -24,11 +23,7 @@ logStream.setFormatter(logFormatter)
 logger.addHandler(logStream)
 
 logger.info("Started Logging")
-
-# Get environment variables
-loopDelayms = int(os.getenv("LFDAQ_DB_LOOP_DELAY_MS"))
     
-# [DONE] connect to QuestDB for sending
 def main() -> None:
     
     instruments = getInstruments()
