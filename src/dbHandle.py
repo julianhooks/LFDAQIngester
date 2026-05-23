@@ -45,7 +45,10 @@ class dbTest(unittest.TestCase):
         dockerClient = docker.from_env()
         questDBInstance = dockerClient.containers.run("questdb/questdb", 
                                                       detach = True, 
-                                                      ports={9000:9000,9009:9009,8812:8812,9003:9003})
+                                                      ports={9000:9000,
+                                                             9009:9009,
+                                                             8812:8812,
+                                                             9003:9003})
 
         # Give the container some time to set up before we test
         time.sleep(3)
