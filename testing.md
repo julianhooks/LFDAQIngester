@@ -13,6 +13,10 @@ I'd also like a way to verify changes do not break the docker image, preferably 
 ## TO-DO
 
 1. **[DONE]** split `main.py` into an appropriate number of files.
-2. **[TO-DO]** write function level tests
+  - I'd like to wrap the labjack library in an object and context manager combo, it would make things more _pythonic_
+  - I'd also like to wrap the ingester itself in an object and context manager, since I basically have an enter and exit method already
+2. **[IN-PROGRESS]** write function level tests
+  - None of the tests actually follow the SmallTalk framework, which means I'll have to rewrite them
+  - The docker python module is how I'm spinning up questdb instances for testing. It takes a few seconds to run the full tests, but it's not too complex
 3. **[TO-DO]** Write project-level test suite into `tests.py`
 4. **[TO-DO]** Figure out docker compose based testing
