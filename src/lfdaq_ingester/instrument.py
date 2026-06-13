@@ -20,8 +20,8 @@ class Instrument:
     IsLabJack: bool
     LabJackPort: Annotated[str,"LabJack connection handle."]
 
-class InstrumentListGenerator:
-    def __init__(self) -> list[Instrument]:
+class InstrumentCreator:
+    def get_instruments(self) -> list[Instrument]:
         instruments = []
         functionNamespace = {}
     
