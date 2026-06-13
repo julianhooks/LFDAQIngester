@@ -28,7 +28,7 @@ def main() -> None:
     with Ingester() as daq_ingester:
         try:
             daq_ingester.loop()
-        except Error as error:
+        except Exception as error:
             raise error
 
 if __name__ == "__main__":
