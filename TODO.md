@@ -2,15 +2,23 @@
 
 `**[{status}]** _{date_assigned}_ -> _{date_completed}_ {assigner git user} to {assignee git user}` 
 
-**[TO-DO]** _06/12/2026_ @julianhooks to @julianhooks 
-- Fix docker image to work on arm64 and amd64 (_From_ai_suggestions_)
-- Make sure build tools are not included in imaging (_From_ai_suggestions_) 
+**[IN-PROGRESS]** _06/12/2026_ @julianhooks to @julianhooks 
+- Refactor `ingester.py` into a single class
 
 **[TO-DO]** _06/12/2026_ @julianhooks to @julianhooks 
-- Fix faulty name errors triggered by pylint (_From ai suggestions_) 
+- Refactor `instrument.py` into a single class
+
+**[TO-DO]** _06/12/2026_ @julianhooks to @julianhooks 
+- Refactor `labjack_handle.py` into a single class
+
+**[TO-DO]** _06/12/2026_ @julianhooks to @julianhooks 
+- Refactor `questdb_handle.py` into a single class
 
 **[IN-PROGRESS]** _06/12/2026_ @julianhooks to @julianhooks 
-- refactor code into modules (_From ai suggestions_)
+- Fix faulty name errors triggered by pylint (_From ai suggestions_) 
+
+**[TO-DO]** _05/15/2026_ @julianhooks to @julianhooks
+- Add docstrings to existing functions
 
 **[IN-PROGRESS]** _05/07/2026_ @julianhooks to @julianhooks
 - Develop testing plan in testing.md 
@@ -19,18 +27,22 @@
 - Add `calibration.py` for calibration function clean up
   - Build out calibration function namespace with usable timer functions
 
-**[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
-- Fix DOCKERFILE to install drivers one stage before installing python requirements
+**[TO-DO]** _06/12/2026_ @julianhooks to @julianhooks 
+- Fix docker image to work on arm64 and amd64 (_From_ai_suggestions_)
+- Make sure build tools are not included in imaging (_From_ai_suggestions_) 
 
 **[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
 - Fix DOCKERFILE to install correct drivers for system architecture
+
+**[TO-DO]** _05/07/2026_ @julianhooks to @julianhooks
+- Fix DOCKERFILE to install drivers one stage before installing python requirements
 
 **[TO-DO]** _05/20/2026_ @julianhooks to @julianhooks
 - Modify `ingestLoop()` to use a pandas dataframe to store data instead of using individual rows populated during the instrument loop
   - Docs say this should increase performance, and it is the preferred method for sending data
 
-**[TO-DO]** _05/15/2026_ @julianhooks to @julianhooks
-- Add docstrings to existing functions
+**[DONE]** _06/12/2026_ @julianhooks to @julianhooks 
+- refactor code into modules (_From ai suggestions_)
 
 **[DONE]** _05/07/2026_ -> _05/07/2026_ @julianhooks to @julianhooks 
 - Fix bug in instrument loading loop where all instruments are loaded regardless of active status or labjack status.
