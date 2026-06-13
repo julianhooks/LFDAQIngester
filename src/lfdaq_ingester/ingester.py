@@ -8,6 +8,7 @@ from labjack import ljm
 import questdb.ingress
 
 from lfdaq_ingester.instrument import Instrument
+from lfdaq_ingester.instrument import InstrumentListGenerator
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +16,7 @@ class Ingester:
     def __init__(self):
         self.labjack_handle = None
         self.questdb_handle = None
-        self.instruments = None
+        self.instruments = InstrumentListGenerator()
         self.setup()
 
     def setup(self):
