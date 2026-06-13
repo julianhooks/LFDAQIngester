@@ -7,7 +7,7 @@ from typing import Annotated, Any
 from labjack import ljm
 import questdb.ingress
 
-from instrument import Instrument
+from lfdaq_ingester.instrument import Instrument
 
 logger = logging.getLogger(__name__)
 

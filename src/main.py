@@ -2,10 +2,10 @@ import logging
 import os
 
 # Import necessary functions
-from questdb_handle import getQuestDBHandle
-from ingester import setup, ingestLoop, onExit
-from labjack_handle import getLabJack
-from instrument import getInstruments
+from lfdaq_ingester.questdb_handle import getQuestDBHandle
+from lfdaq_ingester.ingester import setup, ingestLoop, onExit
+from lfdaq_ingester.labjack_handle import getLabJack
+from lfdaq_ingester.instrument import getInstruments
 
 # Start logger
 logger = logging.getLogger(__name__)
