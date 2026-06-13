@@ -30,9 +30,7 @@ class ingesterTest(unittest.TestCase):
         # Set relevant environment variable
 
         # Set up instrument list
-        instruments = [Instrument(
-
-        )]
+        instruments = []
 
         # Set up false labjack functions
 
