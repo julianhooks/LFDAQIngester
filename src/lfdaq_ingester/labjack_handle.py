@@ -14,7 +14,6 @@ class LabJackHandle:
             logger.error(f"Error occured when connecting to LabJack: {error}.")
             raise error
         logger.info(f"Connected to LabJack on {ljm.getHandleInfo(self.handle)}.")
-        return self.handle
     
     def get_info(self):
         ljm.getHandleInfo(self.handle)
