@@ -21,7 +21,7 @@ class Instrument:
     LabJackPort: Annotated[str,"LabJack connection handle."]
 
 class InstrumentListGenerator:
-    def __init__() -> list[Instrument]:
+    def __init__(self) -> list[Instrument]:
         instruments = []
         functionNamespace = {}
     

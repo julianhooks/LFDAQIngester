@@ -2,16 +2,16 @@
 
 `**[{status}]** _{date_assigned}_ -> _{date_completed}_ {assigner git user} to {assignee git user}` 
 
-**[IN-PROGRESS]** _06/12/2026_ @julianhooks to @julianhooks 
+**[TESTING]** _06/12/2026_ @julianhooks to @julianhooks 
 - Refactor `ingester.py` into a single class
 
-**[TO-DO]** _06/12/2026_ @julianhooks to @julianhooks 
+**[TESTING]** _06/12/2026_ @julianhooks to @julianhooks 
 - Refactor `instrument.py` into a single class
 
-**[TO-DO]** _06/12/2026_ @julianhooks to @julianhooks 
+**[TESTING]** _06/12/2026_ @julianhooks to @julianhooks 
 - Refactor `labjack_handle.py` into a single class
 
-**[TO-DO]** _06/12/2026_ @julianhooks to @julianhooks 
+**[TESTING]** _06/12/2026_ @julianhooks to @julianhooks 
 - Refactor `questdb_handle.py` into a single class
 
 **[IN-PROGRESS]** _06/12/2026_ @julianhooks to @julianhooks 

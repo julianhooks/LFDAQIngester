@@ -16,9 +16,9 @@ logger = logging.getLogger(__name__)
 
 class Ingester:
     def __init__(self):
-        self.labjack_handle = LabJackHandle() 
-        self.questdb_handle = QuestDBHandle() 
         self.instruments = InstrumentListGenerator()
+        self.questdb_handle = QuestDBHandle() 
+        self.labjack_handle = LabJackHandle() 
         self.setup()
 
     def setup(self):
