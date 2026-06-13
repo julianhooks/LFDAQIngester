@@ -25,9 +25,11 @@ class LabJackHandle:
     def get_value(self,name):
         return ljm.eReadName(self,name)
 
-    def __exit__(self):
+    def close(self):
         ljm.close(self.handle)
 
+    def __exit__(self):
+        self.close()
 
 def getLabJack() -> Annotated[int,"LabJack connection handle."]:
     try:

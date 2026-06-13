@@ -52,7 +52,7 @@ class Ingester:
 
     def exit(self) -> None:
         try:
-            ljm.close(labjackHandle)
+            self.labjack_handle.close()    
             logger.info("Closed QuestDB, closed LabJack")
         except ljm.LJMError as error:
             logger.error(f"Error occured when disconnecting from LabJack: {error}.")
