@@ -10,13 +10,14 @@ import questdb.ingress
 from lfdaq_ingester.instrument import Instrument
 from lfdaq_ingester.instrument import InstrumentListGenerator
 from lfdaq_ingester.labjack_handle import LabJackHandle
+from lfdaq_ingester.questdb_handle import QuestDBHandle
 
 logger = logging.getLogger(__name__)
 
 class Ingester:
     def __init__(self):
         self.labjack_handle = LabJackHandle() 
-        self.questdb_handle = None
+        self.questdb_handle = QuestDBHandle() 
         self.instruments = InstrumentListGenerator()
         self.setup()
 
@@ -52,6 +53,7 @@ class Ingester:
 
     def exit(self) -> None:
         try:
+            self.questdb_handle.close()
             self.labjack_handle.close()    
             logger.info("Closed QuestDB, closed LabJack")
         except ljm.LJMError as error:
