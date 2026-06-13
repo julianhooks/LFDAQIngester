@@ -2,6 +2,16 @@
 
 `**[{status}]** _{date_assigned}_ -> _{date_completed}_ {assigner git user} to {assignee git user}` 
 
+**[TO-DO]** _06/12/2026_ @julianhooks to @julianhooks 
+- Fix docker image to work on arm64 and amd64 (_From_ai_suggestions_)
+- Make sure build tools are not included in imaging (_From_ai_suggestions_) 
+
+**[TO-DO]** _06/12/2026_ @julianhooks to @julianhooks 
+- Fix faulty name errors triggered by pylint (_From ai suggestions_) 
+
+**[IN-PROGRESS]** _06/12/2026_ @julianhooks to @julianhooks 
+- refactor code into modules (_From ai suggestions_)
+
 **[IN-PROGRESS]** _05/07/2026_ @julianhooks to @julianhooks
 - Develop testing plan in testing.md 
 

@@ -2,9 +2,9 @@ import logging
 import os
 
 # Import necessary functions
-from dbHandle import getQuestDBHandle
+from questdb_handle import getQuestDBHandle
 from ingester import setup, ingestLoop, onExit
-from labjackHandler import getLabJack
+from labjack_handle import getLabJack
 from instrument import getInstruments
 
 # Start logger
