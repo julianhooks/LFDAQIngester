@@ -16,10 +16,19 @@ logger = logging.getLogger(__name__)
 
 class Ingester:
     def __init__(self):
-        self.instruments = InstrumentCreator().get_instruments()
-        self.questdb_handle = QuestDBHandle() 
-        self.labjack_handle = LabJackHandle() 
+        try:
+            self.instruments = InstrumentCreator().get_instruments()
+            self.questdb_handle = QuestDBHandle() 
+            self.labjack_handle = LabJackHandle() 
+        except Exception as error:
+            raise error
         self.setup()
+
+    def __enter__(self):
+        try:
+            self.questdb_handle.establish()
+        except Exception as error:
+            raise error
 
     def setup(self):
         self.loopDelayms = int(os.getenv("LFDAQ_DB_LOOP_DELAY_MS"))
