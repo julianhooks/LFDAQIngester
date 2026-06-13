@@ -9,12 +9,13 @@ import questdb.ingress
 
 from lfdaq_ingester.instrument import Instrument
 from lfdaq_ingester.instrument import InstrumentListGenerator
+from lfdaq_ingester.labjack_handle import LabJackHandle
 
 logger = logging.getLogger(__name__)
 
 class Ingester:
     def __init__(self):
-        self.labjack_handle = None
+        self.labjack_handle = LabJackHandle() 
         self.questdb_handle = None
         self.instruments = InstrumentListGenerator()
         self.setup()
@@ -23,23 +24,23 @@ class Ingester:
         self.loopDelayms = int(os.getenv("LFDAQ_DB_LOOP_DELAY_MS"))
 
         # [IN-PROGRESS] set up counters 1 and 2 for flowmeters
-        ljm.eWriteName(self.labjack_handle,"DIO0_EF_ENABLE",0)
-        ljm.eWriteName(self.labjack_handle,"DIO0_EF_INDEX",8)
-        ljm.eWriteName(self.labjack_handle,"DIO0_EF_ENABLE",1)
+        self.labjack_handle.set_value("DIO0_EF_ENABLE",0)
+        self.labjack_handle.set_value("DIO0_EF_INDEX",8)
+        self.labjack_handle.set_value("DIO0_EF_ENABLE",1)
         logger.info("Enabled timer 0")
         
-        ljm.eWriteName(self.labjack_handle,"DIO1_EF_ENABLE",0)
-        ljm.eWriteName(self.labjack_handle,"DIO1_EF_INDEX",8)
-        ljm.eWriteName(self.labjack_handle,"DIO1_EF_ENABLE",1)
+        self.labjack_handle.set_value("DIO1_EF_ENABLE",0)
+        self.labjack_handle.set_value("DIO1_EF_INDEX",8)
+        self.labjack_handle.set_value("DIO1_EF_ENABLE",1)
         logger.info("Enabled timer 1")
 
         # enable below and jump DAC1 to DIO0 to test counter
-        # ljm.eWriteName(labJackHandle,"DAC1_FREQUENCY_OUT_ENABLE",1)
+        # self.labjack_handle.set_value("DAC1_FREQUENCY_OUT_ENABLE",1)
 
     def loop(self) -> None:
         while True:
             for instrument in self.instruments:
-                uncalibratedValue = ljm.eReadName(self.labjack_handle, instrument.LabJackPort)
+                uncalibratedValue = self.labjack_handle.get_value(instrument.LabJackPort)
                 calibratedValue = instrument.CalibrationFunction(uncalibratedValue)
                 self.questdb_handle.row(
                         'InstrumentValues',
