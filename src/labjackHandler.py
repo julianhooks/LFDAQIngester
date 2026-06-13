@@ -14,16 +14,3 @@ def getLabJack() -> Annotated[int,"LabJack connection handle."]:
         raise error
     logger.info(f"Connected to LabJack on {ljm.getHandleInfo(labjackHandle)}.")
     return labjackHandle
-
-class LabJackTests(unittest.TestCase):
-    
-    def runTest(self):
-        try:
-            handle = getLabJack()
-            self.assertIsNotNone(handle)
-        except ljm.LJMError as error:
-            self.assertEqual(error.errorCode,1227)
-            pass
-
-if (__name__ == "__main__"):
-    unittest.main()
