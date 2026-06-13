@@ -16,9 +16,6 @@ pluggy==1.6.0
 psycopg==3.3.3
 psycopg-binary==3.3.3
 Pygments==2.20.0
-pylint==4.0.5
-pytest==9.0.3
-pywin32==311
 questdb==4.1.0
 requests==2.34.2
 tomlkit==0.15.0
