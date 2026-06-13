@@ -1,13 +1,13 @@
+"""
+Holds the Ingester class, responsible for primary data collection loop.
+"""
 import logging
 import os
-import unittest
 from time import sleep
-from typing import Annotated, Any
 
 from labjack import ljm
 import questdb.ingress
 
-from lfdaq_ingester.instrument import Instrument
 from lfdaq_ingester.instrument import InstrumentCreator
 from lfdaq_ingester.labjack_handle import LabJackHandle
 from lfdaq_ingester.questdb_handle import QuestDBHandle
@@ -15,30 +15,45 @@ from lfdaq_ingester.questdb_handle import QuestDBHandle
 logger = logging.getLogger(__name__)
 
 class Ingester:
+    """
+    Handles connecting to QuestDB and the LabJack, 
+    running the primary read-write loop, and cleaning up.
+    """
     def __init__(self):
+        """
+        Initializes an Ingester object.
+        Connects to a LabJack T7 and a QuestDB database.
+        Once connected, run labjack setup.
+        """
         try:
             self.instruments = InstrumentCreator().get_instruments()
-            self.questdb_handle = QuestDBHandle() 
-            self.labjack_handle = LabJackHandle() 
+            self.questdb_handle = QuestDBHandle()
+            self.labjack_handle = LabJackHandle()
         except Exception as error:
             raise error
         self.setup()
 
     def __enter__(self):
+        """
+        Automatically connects to the QuetsDB influx port 
+        """
         try:
             self.questdb_handle.establish()
         except Exception as error:
             raise error
 
     def setup(self):
-        self.loopDelayms = int(os.getenv("LFDAQ_DB_LOOP_DELAY_MS"))
+        """
+        Get loop delay and set up labjack hardware counters 
+        """
+        self.loop_delay_ms = int(os.getenv("LFDAQ_DB_LOOP_DELAY_MS"))
 
         # [IN-PROGRESS] set up counters 1 and 2 for flowmeters
         self.labjack_handle.set_value("DIO0_EF_ENABLE",0)
         self.labjack_handle.set_value("DIO0_EF_INDEX",8)
         self.labjack_handle.set_value("DIO0_EF_ENABLE",1)
         logger.info("Enabled timer 0")
-        
+
         self.labjack_handle.set_value("DIO1_EF_ENABLE",0)
         self.labjack_handle.set_value("DIO1_EF_INDEX",8)
         self.labjack_handle.set_value("DIO1_EF_ENABLE",1)
@@ -48,29 +63,35 @@ class Ingester:
         # self.labjack_handle.set_value("DAC1_FREQUENCY_OUT_ENABLE",1)
 
     def loop(self) -> None:
+        """
+        Runs the data collections, calibration, and writing loop. 
+        """
         while True:
             for instrument in self.instruments:
-                uncalibratedValue = self.labjack_handle.get_value(instrument.LabJackPort)
-                calibratedValue = instrument.CalibrationFunction(uncalibratedValue)
+                uncalibrated_value = self.labjack_handle.get_value(instrument.LabJackPort)
+                calibrated_value = instrument.CalibrationFunction(uncalibrated_value)
                 self.questdb_handle.row(
                         'InstrumentValues',
                         symbols={'InstrumentID': instrument.InstrumentID},
-                        columns={'UncalibratedValue': uncalibratedValue,
-                                 'CalibratedValue': calibratedValue},
+                        columns={'Uncalibrated_value': uncalibrated_value,
+                                 'CalibratedValue': calibrated_value},
                         at=questdb.ingress.TimestampNanos.now())
-            sleep(self.loopDelayms/1000.0)
+            sleep(self.loop_delay_ms/1000.0)
 
     def exit(self) -> None:
+        """
+        Close the influx port and close the labjack handle. 
+        """
         try:
             self.questdb_handle.close()
-            self.labjack_handle.close()    
+            self.labjack_handle.close()
             logger.info("Closed QuestDB, closed LabJack")
         except ljm.LJMError as error:
             logger.error(f"Error occured when disconnecting from LabJack: {error}.")
             raise error
 
-    def __enter__(self):
-        pass 
-    
     def __exit__(self, *exc_details):
+        """
+        Make sure things close when using in a with block. 
+        """
         self.exit()
