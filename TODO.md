@@ -2,20 +2,9 @@
 
 `**[{status}]** _{date_assigned}_ -> _{date_completed}_ {assigner git user} to {assignee git user}` 
 
-**[TESTING]** _06/12/2026_ @julianhooks to @julianhooks 
-- Refactor `ingester.py` into a single class
-
-**[TESTING]** _06/12/2026_ @julianhooks to @julianhooks 
-- Refactor `instrument.py` into a single class
-
-**[TESTING]** _06/12/2026_ @julianhooks to @julianhooks 
-- Refactor `labjack_handle.py` into a single class
-
-**[TESTING]** _06/12/2026_ @julianhooks to @julianhooks 
-- Refactor `questdb_handle.py` into a single class
-
 **[IN-PROGRESS]** _06/12/2026_ @julianhooks to @julianhooks 
 - Fix faulty name errors triggered by pylint (_From ai suggestions_) 
+- Got through all modules
 
 **[TO-DO]** _05/15/2026_ @julianhooks to @julianhooks
 - Add docstrings to existing functions
@@ -40,6 +29,18 @@
 **[TO-DO]** _05/20/2026_ @julianhooks to @julianhooks
 - Modify `ingestLoop()` to use a pandas dataframe to store data instead of using individual rows populated during the instrument loop
   - Docs say this should increase performance, and it is the preferred method for sending data
+
+**[DONE]** _06/12/2026_ -> _06/16/26_ @julianhooks to @julianhooks 
+- Refactor `ingester.py` into a single class
+
+**[DONE]** _06/12/2026_ -> _06/16/26_ @@julianhooks to @julianhooks 
+- Refactor `instrument.py` into a single class
+
+**[DONE]** _06/12/2026_ -> _06/16/26_ @@julianhooks to @julianhooks 
+- Refactor `labjack_handle.py` into a single class
+
+**[DONE]** _06/12/2026_ -> _06/16/26_ @@julianhooks to @julianhooks 
+- Refactor `questdb_handle.py` into a single class
 
 **[DONE]** _06/12/2026_ @julianhooks to @julianhooks 
 - refactor code into modules (_From ai suggestions_)
