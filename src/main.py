@@ -4,10 +4,7 @@ Contains logger set up and main loop code.
 import logging
 
 # Import necessary functions
-from lfdaq_ingester.questdb_handle import getQuestDBHandle
-from lfdaq_ingester.ingester import setup, ingestLoop, onExit
-from lfdaq_ingester.labjack_handle import getLabJack
-from lfdaq_ingester.instrument import getInstruments
+from lfdaq_ingester.ingester import Ingester 
 
 # Start logger
 logger = logging.getLogger(__name__)
@@ -28,15 +25,11 @@ def main() -> None:
     """
     Runs the main lfdaq_ingester loop.
     """
-    instruments = getInstruments()
-    lj_handle = getLabJack()
-    setup(lj_handle)
-    with getQuestDBHandle() as db_handle:
+    with Ingester() as daq_ingester:
         try:
-            while True:
-                ingestLoop(instruments,lj_handle,db_handle)
-        finally:
-            onExit(lj_handle)
+            daq_ingester.loop()
+        except Exception as error:
+            raise error
 
 if __name__ == "__main__":
     main()
