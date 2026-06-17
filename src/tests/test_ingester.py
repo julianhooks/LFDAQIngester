@@ -1,25 +1,25 @@
 import logging
 import os
 import unittest
+
 from time import sleep
 from typing import Annotated, Any
 
 from labjack import ljm
+
 import questdb.ingress
 
 from lfdaq_ingester.ingester import Ingester
+from utils import LFDAQTestFixture
 
 logger = logging.getLogger(__name__)
 
-class ingesterTest(unittest.TestCase):
+class ingesterTest(LFDAQTestFixture):
     def setUp(self):
-        # Set up questdb docker container 
-
-        # Set relevant environment variables
-
+        # Creates questdb instance for test
+        super().setUp()
         # Set up ingester for testing
         self.ingester = Ingester()
-
         # Set up instrument lists for querying
 
         # Set up mock labjack functions
@@ -46,6 +46,7 @@ class ingesterTest(unittest.TestCase):
 
     def tearDown(self):
         self.ingester.exit() 
+        super().tearDown()
 
 
 if (__name__ == "__main__"):
