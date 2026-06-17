@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 class Instrument:
     """
     dataclass docstring
+
+    member variables break naming convention to align with the SQL column names.
     """
     InstrumentID: Annotated[str,"QuestDB Symbol"]
     InstrumentName: str

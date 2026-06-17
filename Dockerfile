@@ -54,4 +54,4 @@ ENV LFDAQ_DB_LOOP_DELAY_MS=25
 
 
 # Run the application.
-CMD ["python", "src/main_refactor.py"]
+CMD ["python", "src/main.py"]
