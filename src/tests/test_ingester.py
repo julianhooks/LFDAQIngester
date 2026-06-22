@@ -18,11 +18,6 @@ class ingesterTest(LFDAQTestFixture):
     def setUp(self):
         # Creates questdb instance for test
         super().setUp()
-        # Set up ingester for testing
-        self.ingester = Ingester()
-        # Set up instrument lists for querying
-
-        # Set up mock labjack functions
 
     def runTest(self):
         # Run test
@@ -37,15 +32,19 @@ class ingesterTest(LFDAQTestFixture):
         # Loop is calling eReadVoltages properly
         # Loop is writing to db properly
         # Loop is waiting properly
+        
+        # Set up ingester for testing
+        self.ingester = Ingester()
 
         try:
-            self.ingester.questdb_handle.establish() 
+            self.ingester.questdb_handle.establish()
         except Exception as error:
             raise error 
+        finally
+            self.ingester.exit()
 
 
     def tearDown(self):
-        self.ingester.exit() 
         super().tearDown()
 
 
