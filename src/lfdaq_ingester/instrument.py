@@ -10,25 +10,33 @@ import psycopg as pg
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class Instrument:
     """
     dataclass docstring
 
-    member variables break naming convention to align with the SQL column names.
+    member variables break naming convention to align with the SQL column names
     """
-    InstrumentID: Annotated[str,"QuestDB Symbol"]
+    InstrumentID: Annotated[str, "QuestDB Symbol"]
     InstrumentName: str
-    CalibrationFunction: Annotated[callable,"With functions included from calibration.py"]
+    CalibrationFunction: Annotated[callable,
+                                   """
+                                   With functions included
+                                   from calibration.py
+                                   """
+                                   ]
     IsActive: bool
     Unit: str
     IsLabJack: bool
-    LabJackPort: Annotated[str,"LabJack connection handle."]
+    LabJackPort: Annotated[str, "LabJack connection handle."]
+
 
 class InstrumentCreator:
     """
     instrument factory docstring
     """
+
     def get_instruments(self) -> list[Instrument]:
         """
         get instruments docstring
@@ -44,18 +52,21 @@ class InstrumentCreator:
                 autocommit=True
                 ) as connector:
             with connector.cursor(
-                binary=True,
-                row_factory=pg.rows.dict_row
-                ) as cursor:
+                    binary=True,
+                    row_factory=pg.rows.dict_row
+                    ) as cursor:
                 cursor.execute("SELECT version")
                 version = cursor.fetchone()
                 logger.info(f'Connected to QuestDB version: {version["version"]}')
                 cursor.execute("SELECT * FROM Instruments")
                 instrument_table = cursor.fetchall()
                 for row in instrument_table:
-                    if (bool(row["IsLabJack"]) is False or bool(row["IsActive"]) is False):
+                    if (bool(row["IsLabJack"]) is False
+                            or bool(row["IsActive"]) is False):
                         continue
-                    exec("cf = "+ row["CalibrationFunction"],function_namespace)
+                    exec("cf = "
+                         + row["CalibrationFunction"],
+                         function_namespace)
                     instruments.append(
                             Instrument(
                                 row["InstrumentID"],
