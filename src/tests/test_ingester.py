@@ -9,12 +9,11 @@ from labjack import ljm
 
 import questdb.ingress
 
-from lfdaq_ingester.ingester import Ingester
-from utils import LFDAQTestFixture
+from lfdaq_ingester.ingester import *
 
 logger = logging.getLogger(__name__)
 
-class ingesterTest(LFDAQTestFixture):
+class ingesterTest(unittest.TestCase):
     def setUp(self):
         # Creates questdb instance for test
         super().setUp()
