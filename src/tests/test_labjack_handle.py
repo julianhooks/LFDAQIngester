@@ -30,8 +30,8 @@ class LabJackTestFixture(unittest.TestCase):
         """
         Set up mock labjack functions
         """
-        os.environ["LFDAQ_DB_LOOP_DELAY_MS"] = "1000"
 
+        os.environ["LFDAQ_DB_LOOP_DELAY_MS"] = "1000"
         self.mock_labjack = unittest.mock.create_autospec(LabJackHandle)
         # Check different edge case numbers
         # (Vmin, Vmax, UINT16 max, INT32 min/max, and UINT32 max)

@@ -35,6 +35,7 @@ class Ingester:
             self.questdb_handle = QuestDBHandle()
         except Exception as error:
             raise error
+        # This little catch is here so I can mock labjack_handle in testing
         if labjack_handle is not None:
             self.labjack_handle = labjack_handle
         else:
@@ -46,7 +47,7 @@ class Ingester:
 
     def __enter__(self):
         """
-        Automatically connects to the QuetsDB influx port
+        Automatically connects to the QuestDB influx port
         """
         try:
             self.questdb_handle.establish()

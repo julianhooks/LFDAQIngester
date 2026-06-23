@@ -32,6 +32,9 @@ class ingesterTest(InstrumentTestFixture, LabJackTestFixture):
         finally:
             self.ingester.labjack_handle.set_value.assert_called()
 
+    def test_loop(self):
+        pass
+
     def runTest(self):
         # Run test
         # setup() is not accessing false register names
