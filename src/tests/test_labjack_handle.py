@@ -1,58 +1,73 @@
+"""
+
+"""
 import logging
+import os
 import unittest
-from typing import Annotated
+import unittest.mock
 
 from labjack import ljm
 
+from lfdaq_ingester.labjack_handle import LabJackHandle
+
 logger = logging.getLogger(__name__)
 
-def getLabJack() -> Annotated[int,"LabJack connection handle."]:
-    try:
-        labjackHandle = ljm.openS("T7","ANY","ANY")
-    except ljm.LJMError as error:
-        logger.error(f"Error occured when connecting to LabJack: {error}.")
-        raise error
-    logger.info(f"Connected to LabJack on {ljm.getHandleInfo(labjackHandle)}.")
-    return labjackHandle
 
 class LabJackTestFixture(unittest.TestCase):
     """
 
     """
     ljm_type_conversions = {
-            ljm.constants.UINT16 : int,
-            ljm.constants.UINT32 : int,
-            ljm.constants.INT32 : int,
-            ljm.constants.FLOAT32 : float,
-            ljm.constants.BYTE : bytes,
-            ljm.constants.STRING : str
+            ljm.constants.UINT16: int,
+            ljm.constants.UINT32: int,
+            ljm.constants.INT32: int,
+            ljm.constants.FLOAT32: float,
+            ljm.constants.BYTE: bytes,
+            ljm.constants.STRING: str
         }
 
     def create_labjack_mockup(self):
         """
         Set up mock labjack functions
         """
-        self.mock_labjack = unittest.mock.create_autospec(LabJackHandle)
-        self.mock_labjack.get_value.return_value = 0
-        # Check name called with is a valid name, if name is incorrect then raise correct error (LJM 1294)
-        self.mock_labjack.get_value.side_effect = ljm.nameToAddress(self.mock_labjack.call_args.args[0])
+        os.environ["LFDAQ_DB_LOOP_DELAY_MS"] = "1000"
 
-    def check_labjack_set_value(name, value):
+        self.mock_labjack = unittest.mock.create_autospec(LabJackHandle)
+        # Check different edge case numbers
+        # (Vmin, Vmax, UINT16 max, INT32 min/max, and UINT32 max)
+        self.mock_labjack.get_value.return_value = [1, 0, -1,
+                                                    10, -10,
+                                                    65536,
+                                                    2147483647, -2147483648,
+                                                    4294967296]
+
+    def destroy_labjack_mockup(self):
+        os.environ.pop("LFDAQ_DB_LOOP_DELAY_MS")
+
+    def verify_labjack_type(self, name, value):
         """
-        Check that the input type to a set_value call is type correct with the output call
+        Check that the input type to a set_value call
+        is type correct with the output call
         """
         address = ljm.nameToAddress(name)
         address_type_constant = ljm.addressToType(address)
         address_type = self.ljm_type_conversions[address_type_constant]
         assert type(value) is address_type
-    
+
+    def setUp(self) -> None:
+        self.create_labjack_mockup()
+
     def runTest(self):
         try:
-            handle = getLabJack()
-            self.assertIsNotNone(handle)
+            handle = LabJackHandle()
         except ljm.LJMError as error:
-            self.assertEqual(error.errorCode,1227)
+            self.assertEqual(error.errorCode, 1227)
+            handle = self.mock_labjack
             pass
+
+    def tearDown(self) -> None:
+        self.destroy_labjack_mockup()
+
 
 if (__name__ == "__main__"):
     unittest.main()

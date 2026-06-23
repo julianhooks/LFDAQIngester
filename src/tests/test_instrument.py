@@ -97,7 +97,7 @@ class InstrumentTestFixture(QuestDBHandleTestFixture):
         self.populate_questdb()
 
     def runTest(self) -> None:
-        instrumentList = InstrumentCreator.get_instruments()
+        instrumentList = InstrumentCreator().get_instruments()
         self.assertEqual(instrumentList[0].InstrumentID,
                          self.test_instrument.InstrumentID)
         self.assertEqual(instrumentList[0].InstrumentName,

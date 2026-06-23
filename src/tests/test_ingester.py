@@ -1,16 +1,36 @@
+"""
+
+"""
 import logging
+import os
 import unittest
+
+from labjack import ljm
+
+from tests.test_instrument import InstrumentTestFixture
+from tests.test_labjack_handle import LabJackTestFixture
 
 from lfdaq_ingester.ingester import Ingester
 
 logger = logging.getLogger(__name__)
 
 
-class ingesterTest(unittest.TestCase):
+@unittest.mock.patch("lfdaq_ingester.labjack_handle.LabJackHandle", autospec=True)
+class ingesterTest(InstrumentTestFixture, LabJackTestFixture):
 
     def setUp(self):
-        # Creates questdb instance for test
-        super().setUp()
+        self.create_questdb_container()
+        self.populate_questdb()
+        os.environ["LFDAQ_DB_LOOP_DELAY_MS"] = "1000"
+
+    def test_init(self, MockLabJackHandle):
+        try:
+            self.ingester = Ingester()
+        except ljm.LJMError as error:
+            self.assertEqual(error.errorCode, 1227)
+            self.ingester = Ingester(labjack_handle=MockLabJackHandle)
+        finally:
+            self.ingester.labjack_handle.set_value.assert_called()
 
     def runTest(self):
         # Run test
@@ -18,7 +38,7 @@ class ingesterTest(unittest.TestCase):
         # - ljm.nameToAddress should return an error if name does not exist
         #   - Raises error 1294 on bad name
         # - ljm.addressToType could also be used to check inputs
-        #   - This returns a number corresponding to an LJM constant for the ctype
+        #   - This returns a number corresponding to an LJM type constant
         # - ljm.errorToString might also be useful in the future
 
         # Loop is calling calibration functions properly
@@ -27,17 +47,11 @@ class ingesterTest(unittest.TestCase):
         # Loop is waiting properly
 
         # Set up ingester for testing
-        self.ingester = Ingester()
-
-        try:
-            self.ingester.questdb_handle.establish()
-        except Exception as error:
-            raise error
-        finally:
-            self.ingester.exit()
+        self.test_init()
 
     def tearDown(self):
-        super().tearDown()
+        self.remove_questdb_container()
+        os.environ.pop("LFDAQ_DB_LOOP_DELAY_MS")
 
 
 if (__name__ == "__main__"):
