@@ -6,16 +6,16 @@ import unittest
 import docker
 import questdb.ingress
 
-from labjack import ljm
-
-from lfdaq_ingester.questdb_handle import *
+from lfdaq_ingester.questdb_handle import QuestDBHandle
 
 logger = logging.getLogger(__name__)
+
 
 class QuestDBHandleTestFixture(unittest.TestCase):
     """
 
     """
+
     def create_questdb_container(self):
         """
 
@@ -30,12 +30,10 @@ class QuestDBHandleTestFixture(unittest.TestCase):
         os.environ["LFDAQ_DB_AUTOFLUSH_ROWS"] = "10"
         # Start test database docker container
         self.docker_client = docker.from_env()
-        self.questdb_instance = self.docker_client.containers.run("questdb/questdb",
-                                                                 detach = True,
-                                                                 ports={9000:9000,
-                                                                        9009:9009,
-                                                                        8812:8812,
-                                                                        9003:9003})
+        self.questdb_instance = self.docker_client.containers.run(
+                "questdb/questdb",
+                detach=True,
+                ports={9000: 9000, 9009: 9009, 8812: 8812, 9003: 9003})
         # Give the container some time to set up before we test
         time.sleep(4)
 
@@ -53,20 +51,19 @@ class QuestDBHandleTestFixture(unittest.TestCase):
         os.environ.pop("LFDAQ_DB_AUTOFLUSH_ROWS")
         self.questdb_instance.stop()
 
-     
     def setUp(self) -> None:
         self.create_questdb_container()
 
     def runTest(self) -> None:
-        try:
-            result = getQuestDBHandle() 
-            self.assertIsInstance(result,questdb.ingress.Sender)
-            with result as handle:
-                dbLogs = str(questDBInstance.logs())
-                self.assertTrue(("http-server connected" in dbLogs))
+        questdb_handle = QuestDBHandle()
+        self.assertIsInstance(questdb_handle, questdb.ingress.Sender)
+        with questdb_handle:
+            dbLogs = str(self.questdb_instance.logs())
+            self.assertTrue(("http-server connected" in dbLogs))
 
     def tearDown(self) -> None:
         self.remove_questdb_container()
-    
+
+
 if (__name__ == "__main__"):
     unittest.main()

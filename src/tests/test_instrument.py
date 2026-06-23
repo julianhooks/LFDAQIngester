@@ -9,16 +9,15 @@ import psycopg as pg
 
 from tests.test_questdb_handle import QuestDBHandleTestFixture
 
-from lfdaq_ingester.instrument import *
+from lfdaq_ingester.instrument import Instrument, InstrumentCreator
 
 logger = logging.getLogger(__name__)
 
 
-class InstrumentTestFixture(unittest.TestCase):
+class InstrumentTestFixture(QuestDBHandleTestFixture):
     """
 
     """
-
     test_instrument = Instrument(
         "TEST",
         "Testing",
@@ -28,6 +27,7 @@ class InstrumentTestFixture(unittest.TestCase):
         True,
         "AIN0"
     )
+
     def populate_questdb(self):
         """
         Set up instrument table and test insturment in database
@@ -40,7 +40,7 @@ class InstrumentTestFixture(unittest.TestCase):
         if self.questdb_instance is None:
             raise AttributeError(self.questdb_instance, self)
 
-        # Should add test data for a not-good instruments to check error handling
+        # Should add test data for a bad instrument to check error handling
 
         with pg.connect(
                 host=os.getenv("LFDAQ_DB_URL"),
@@ -55,15 +55,16 @@ class InstrumentTestFixture(unittest.TestCase):
                 cursor.execute(
                     """
                     CREATE TABLE Instruments (
-                	  "InstrumentID" SYMBOL,
-                	  "InstrumentName" VARCHAR,
-                	  "CalibrationFunction" VARCHAR,
-                	  "Unit" VARCHAR,
-                	  "IsActive" BOOLEAN,
-                	  "IsLabJack" BOOLEAN,
-                	  "LabJackPort" VARCHAR
+                      "InstrumentID" SYMBOL,
+                      "InstrumentName" VARCHAR,
+                      "CalibrationFunction" VARCHAR,
+                      "Unit" VARCHAR,
+                      "IsActive" BOOLEAN,
+                      "IsLabJack" BOOLEAN,
+                      "LabJackPort" VARCHAR
                     )
-                    """)
+                    """
+                    )
                 cursor.execute(
                     """
                     INSERT INTO Instruments (
@@ -96,7 +97,7 @@ class InstrumentTestFixture(unittest.TestCase):
         self.populate_questdb()
 
     def runTest(self) -> None:
-        instrumentList = getInstruments()
+        instrumentList = InstrumentCreator.get_instruments()
         self.assertEqual(instrumentList[0].InstrumentID,
                          self.test_instrument.InstrumentID)
         self.assertEqual(instrumentList[0].InstrumentName,
